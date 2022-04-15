@@ -5,11 +5,13 @@ part of amap_flutter_base;
 ///高德SDK合规使用方案请参考：https://lbs.amap.com/news/sdkhgsy
 class AMapPrivacyStatement {
   /// 隐私权政策是否包含高德开平隐私权政策
-  final bool ?hasContains;
+  final bool? hasContains;
+
   /// 隐私权政策是否弹窗展示告知用户
-  final bool ?hasShow;
+  final bool? hasShow;
+
   /// 隐私权政策是否已经取得用户同意
-  final bool ?hasAgree;
+  final bool? hasAgree;
 
   ///构造AMapPrivacyStatement
   ///
@@ -18,8 +20,11 @@ class AMapPrivacyStatement {
   ///[hasShow] 隐私权政策是否弹窗展示告知用户
   ///
   ///[hasAgree] 隐私权政策是否已经取得用户同意
-  const AMapPrivacyStatement({@required this.hasContains = false, @required this.hasShow=false, @required this
-      .hasAgree=false});
+  const AMapPrivacyStatement({
+    this.hasContains = false,
+    this.hasShow = false,
+    this.hasAgree = false,
+  });
 
   dynamic toMap() {
     final Map<String, dynamic> json = <String, dynamic>{};
@@ -41,9 +46,9 @@ class AMapPrivacyStatement {
     if (identical(this, other)) return true;
     if (runtimeType != other.runtimeType) return false;
     final AMapPrivacyStatement typedOther = other;
-    return hasContains == typedOther.hasContains
-        && hasShow == typedOther.hasShow
-        && hasAgree == typedOther.hasAgree;
+    return hasContains == typedOther.hasContains &&
+        hasShow == typedOther.hasShow &&
+        hasAgree == typedOther.hasAgree;
   }
 
   @override

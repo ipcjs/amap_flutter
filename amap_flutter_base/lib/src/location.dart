@@ -113,13 +113,15 @@ class AMapLocation {
 }
 
 /// 经纬度坐标对象， 单位为度.
-class LatLng {
+/// @see [LatLng]
+@Deprecated('使用LatLng替代')
+class AMapLatLng {
   ///根据纬度[latitude]和经度[longitude]创建经纬度对象
   ///
   ///[latitude]取值范围 [-90.0,90.0].
   ///
   /// [latitude]取值范围 [-180.0,179.0]
-  const LatLng(double latitude, double longitude)
+  const AMapLatLng(double latitude, double longitude)
       : latitude =
             (latitude < -90.0 ? -90.0 : (90.0 < latitude ? 90.0 : latitude)),
         longitude = (longitude + 180.0) % 360.0 - 180.0;
@@ -135,11 +137,11 @@ class LatLng {
   }
 
   /// 根据传入的经纬度数组 \[lat, lng\] 序列化一个LatLng对象.
-  static LatLng? fromJson(dynamic json) {
+  static AMapLatLng? fromJson(dynamic json) {
     if (json == null) {
       return null;
     }
-    return LatLng(json[0], json[1]);
+    return AMapLatLng(json[0], json[1]);
   }
 
   @override
@@ -147,7 +149,9 @@ class LatLng {
 
   @override
   bool operator ==(Object o) {
-    return o is LatLng && o.latitude == latitude && o.longitude == longitude;
+    return o is AMapLatLng &&
+        o.latitude == latitude &&
+        o.longitude == longitude;
   }
 
   @override
@@ -155,9 +159,11 @@ class LatLng {
 }
 
 /// 经纬度对齐的矩形.
-class LatLngBounds {
+/// @see [LatLngBounds]
+@Deprecated('使用LatLngBounds替代')
+class AMapLatLngBounds {
   /// 使用传入的西南角坐标[southwest]和东北角坐标[northeast]创建一个矩形区域.
-  LatLngBounds({required this.southwest, required this.northeast}) {
+  AMapLatLngBounds({required this.southwest, required this.northeast}) {
     try {
       assert(southwest.latitude <= northeast.latitude,
           '西南角纬度超过了东北角纬度(${southwest.latitude} > ${northeast.latitude})');
@@ -167,10 +173,10 @@ class LatLngBounds {
   }
 
   /// 西南角坐标.
-  final LatLng southwest;
+  final AMapLatLng southwest;
 
   /// 东北角坐标.
-  final LatLng northeast;
+  final AMapLatLng northeast;
 
   dynamic toJson() {
     if (southwest.latitude > northeast.latitude) {
@@ -180,7 +186,7 @@ class LatLngBounds {
   }
 
   /// 判断矩形区域是否包含传入的经纬度[point].
-  bool contains(LatLng point) {
+  bool contains(AMapLatLng point) {
     try {
       return _containsLatitude(point.latitude) &&
           _containsLongitude(point.longitude);
@@ -203,13 +209,13 @@ class LatLngBounds {
   }
 
   @visibleForTesting
-  static LatLngBounds? fromList(dynamic json) {
+  static AMapLatLngBounds? fromList(dynamic json) {
     if (json == null) {
       return null;
     }
-    return LatLngBounds(
-      southwest: LatLng.fromJson(json[0])!,
-      northeast: LatLng.fromJson(json[1])!,
+    return AMapLatLngBounds(
+      southwest: AMapLatLng.fromJson(json[0])!,
+      northeast: AMapLatLng.fromJson(json[1])!,
     );
   }
 
@@ -220,7 +226,7 @@ class LatLngBounds {
 
   @override
   bool operator ==(Object o) {
-    return o is LatLngBounds &&
+    return o is AMapLatLngBounds &&
         o.southwest == southwest &&
         o.northeast == northeast;
   }
