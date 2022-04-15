@@ -32,7 +32,7 @@ class _State extends State<_Body> {
     Colors.green,
     Colors.pink,
   ];
-  Map<String, Polyline> _polylines = <String, Polyline>{};
+  Map<PolylineId, Polyline> _polylines = <PolylineId, Polyline>{};
   late String selectedPolylineId;
   AMapController? _controller;
 
@@ -48,16 +48,17 @@ class _State extends State<_Body> {
     points.add(LatLng(38.905151 + offset, 70.401726));
     return points;
   }
-
+  int _polylineIdValue = 0;
   void _add() {
     final Polyline polyline = Polyline(
+      polylineId: PolylineId((_polylineIdValue++).toString()),
         color: colors[++colorsIndex % colors.length],
         width: 10,
         geodesic: true,
         points: _createPoints());
 
     setState(() {
-      _polylines[polyline.id] = polyline;
+      _polylines[polyline.polylineId] = polyline;
     });
     //移动到合适的范围
     LatLngBounds bound =

@@ -64,7 +64,7 @@ class Polyline extends BaseOverlay {
     this.color = const Color(0xCCC4E0F0),
   })  : assert(points.length > 0),
         this.width = (width <= 0 ? 10 : width),
-        this.alpha =(alpha < 0 ? 0 : (alpha > 1 ? 1 : alpha)),
+        this.alpha = (alpha < 0 ? 0 : (alpha > 1 ? 1 : alpha)),
         super();
 
   /// 覆盖物的坐标点数组,points不能为空
@@ -162,7 +162,7 @@ class Polyline extends BaseOverlay {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
-    if (other is !Polyline) return false;
+    if (other is! Polyline) return false;
     final Polyline typedOther = other;
     return id == typedOther.id &&
         listEquals(points, typedOther.points) &&

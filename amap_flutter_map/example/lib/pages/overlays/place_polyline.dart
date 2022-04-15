@@ -1,7 +1,9 @@
 import 'package:amap_flutter_map_example/base_page.dart';
 import 'package:amap_flutter_map_example/widgets/amap_switch_button.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:collection/collection.dart';
 
 import 'package:amap_flutter_map/amap_flutter_map.dart';
 import 'package:amap_flutter_base/amap_flutter_base.dart';
@@ -32,8 +34,8 @@ class _State extends State<_Body> {
     Colors.green,
     Colors.pink,
   ];
-  Map<String, Polyline> _polylines = <String, Polyline>{};
-  String? selectedPolylineId;
+  Map<PolylineId, Polyline> _polylines = <PolylineId, Polyline>{};
+  PolylineId? selectedPolylineId;
 
   void _onMapCreated(AMapController controller) {}
 
@@ -49,14 +51,17 @@ class _State extends State<_Body> {
     return points;
   }
 
+  int _polylineIdValue = 0;
   void _add() {
+    final polylineId = PolylineId((_polylineIdValue++).toString());
     final Polyline polyline = Polyline(
+        polylineId: polylineId,
         color: colors[++colorsIndex % colors.length],
         width: 10,
         points: _createPoints(),
-        onTap: _onPolylineTapped);
+        onTap: () => _onPolylineTapped(polylineId));
     setState(() {
-      _polylines[polyline.id] = polyline;
+      _polylines[polyline.polylineId] = polyline;
     });
   }
 
@@ -76,7 +81,7 @@ class _State extends State<_Body> {
     final Polyline? selectedPolyline = _polylines[selectedPolylineId]!;
     //有选中的Polyline
     if (selectedPolyline != null) {
-      double currentWidth = selectedPolyline.width;
+      int currentWidth = selectedPolyline.width;
       if (currentWidth < 50) {
         currentWidth += 10;
       } else {
@@ -84,74 +89,85 @@ class _State extends State<_Body> {
       }
 
       setState(() {
-        _polylines[selectedPolylineId!] = selectedPolyline.copyWith(widthParam: currentWidth);
+        _polylines[selectedPolylineId!] =
+            selectedPolyline.copyWith(widthParam: currentWidth);
       });
     } else {
       print('无选中的Polyline，无法修改宽度');
     }
   }
 
-  void _onPolylineTapped(String polylineId) {
+  void _onPolylineTapped(PolylineId polylineId) {
     print('Polyline: $polylineId 被点击了');
     setState(() {
       selectedPolylineId = polylineId;
     });
   }
 
+  static final _dashLineTypes = <List<PatternItem>>[
+    [],
+    [PatternItem.dash(1), PatternItem.gap(1)],
+    [PatternItem.dot, PatternItem.gap(1)],
+  ];
   Future<void> _changeDashLineType() async {
     final Polyline? polyline = _polylines[selectedPolylineId];
     if (polyline == null) {
       return;
     }
-    DashLineType currentType = polyline.dashLineType;
-    if (currentType.index < DashLineType.circle.index) {
-      currentType = DashLineType.values[currentType.index + 1];
-    } else {
-      currentType = DashLineType.none;
-    }
+    final currentType = polyline.patterns;
+
+    final currentIndex = _dashLineTypes
+        .indexWhere((element) => listEquals(currentType, element));
 
     setState(() {
-      _polylines[selectedPolylineId!] =
-          polyline.copyWith(dashLineTypeParam: currentType);
+      _polylines[selectedPolylineId!] = polyline.copyWith(
+          patternsParam:
+              _dashLineTypes[(currentIndex + 1) % _dashLineTypes.length]);
     });
   }
 
+  static final _capTypes = [
+    Cap.buttCap,
+    Cap.roundCap,
+    Cap.squareCap,
+    // 目前任意自定义的Cap, 都会被映射成CapType.arrow...
+    Cap.customCapFromBitmap(AMapBitmapDescriptor.fromIconPath('arrow')),
+  ];
   void _changeCapType() {
     final Polyline? polyline = _polylines[selectedPolylineId]!;
     if (polyline == null) {
       return;
     }
-    CapType capType = polyline.capType;
-    if (capType.index < CapType.round.index) {
-      capType = CapType.values[capType.index + 1];
-    } else {
-      capType = CapType.butt;
-    }
+    final capType = _capTypes[
+        (_capTypes.indexOf(polyline.startCap) + 1) % _capTypes.length];
     setState(() {
-      _polylines[selectedPolylineId!] = polyline.copyWith(capTypeParam: capType);
+      _polylines[selectedPolylineId!] =
+          polyline.copyWith(startCapParam: capType, endCapParam: capType);
     });
   }
 
+  static const _jointTypes = [
+    JointType.bevel,
+    JointType.round,
+    JointType.mitered,
+  ];
   void _changeJointType() {
     final Polyline polyline = _polylines[selectedPolylineId]!;
-    JoinType joinType = polyline.joinType;
-    if (joinType.index < JoinType.round.index) {
-      joinType = JoinType.values[joinType.index + 1];
-    } else {
-      joinType = JoinType.bevel;
-    }
+    final jointType = _jointTypes[
+        (_jointTypes.indexOf(polyline.jointType) + 1) % _jointTypes.length];
     setState(() {
       _polylines[selectedPolylineId!] =
-          polyline.copyWith(joinTypeParam: joinType);
+          polyline.copyWith(jointTypeParam: jointType);
     });
   }
 
   Future<void> _changeAlpha() async {
     final Polyline polyline = _polylines[selectedPolylineId]!;
-    final double current = polyline.alpha;
+    final double current = polyline.color.opacity;
     setState(() {
       _polylines[selectedPolylineId!] = polyline.copyWith(
-        alphaParam: current < 0.1 ? 1.0 : current * 0.75,
+        colorParam:
+            polyline.color.withOpacity(current < 0.1 ? 1.0 : current * 0.75),
       );
     });
   }

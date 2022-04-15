@@ -18,8 +18,8 @@ class _Body extends StatefulWidget {
 
 class _BodyState extends State<_Body> {
   static final LatLng markerPosition = const LatLng(39.909187, 116.397451);
-  final Map<String, Marker> _initMarkerMap = <String, Marker>{};
-  String? _currentMarkerId;
+  final Map<MarkerId, Marker> _initMarkerMap = <MarkerId, Marker>{};
+  MarkerId? _currentMarkerId;
   bool _hasInitMarker = false;
   static final String _startIconPath = 'assets/start.png';
   static final String _endIconPath = 'assets/end.png';
@@ -29,12 +29,13 @@ class _BodyState extends State<_Body> {
       return;
     }
     Marker marker = Marker(
+        markerId: MarkerId('1'),
         position: markerPosition,
-        icon: BitmapDescriptor.fromIconPath(_iconPath));
+        icon: AMapBitmapDescriptor.fromIconPath(_iconPath));
     setState(() {
       _hasInitMarker = true;
-      _currentMarkerId = marker.id;
-      _initMarkerMap[marker.id] = marker;
+      _currentMarkerId = marker.markerId;
+      _initMarkerMap[marker.markerId] = marker;
     });
   }
 
@@ -42,8 +43,8 @@ class _BodyState extends State<_Body> {
     Marker marker = _initMarkerMap[_currentMarkerId]!;
     setState(() {
       _iconPath = _iconPath == _startIconPath ? _endIconPath : _startIconPath;
-      _initMarkerMap[_currentMarkerId!] =
-          marker.copyWith(iconParam: BitmapDescriptor.fromIconPath(_iconPath));
+      _initMarkerMap[_currentMarkerId!] = marker.copyWith(
+          iconParam: AMapBitmapDescriptor.fromIconPath(_iconPath));
     });
   }
 
@@ -51,7 +52,8 @@ class _BodyState extends State<_Body> {
     return TextButton(
       onPressed: onPressed,
       style: ButtonStyle(
-        shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+        shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
         //文字颜色
         foregroundColor: MaterialStateProperty.all(Colors.white),
         //水波纹颜色

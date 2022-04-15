@@ -20,16 +20,16 @@ class _Body extends StatefulWidget {
 
 class _BodyState extends State<_Body> {
   static final LatLng mapCenter = const LatLng(39.909187, 116.397451);
-  final Map<String, Marker> _initMarkerMap = <String, Marker>{};
+  final _initMarkerMap = <MarkerId, Marker>{};
 
   @override
   Widget build(BuildContext context) {
-    for(int i=0; i< 10; i++) {
-      LatLng position = LatLng(
-          mapCenter.latitude + sin(i * pi / 12.0) / 20.0,
+    for (int i = 0; i < 10; i++) {
+      LatLng position = LatLng(mapCenter.latitude + sin(i * pi / 12.0) / 20.0,
           mapCenter.longitude + cos(i * pi / 12.0) / 20.0);
-      Marker marker = Marker(position: position);
-      _initMarkerMap[marker.id] = marker;
+      Marker marker =
+          Marker(markerId: MarkerId(i.toString()), position: position);
+      _initMarkerMap[marker.markerId] = marker;
     }
 
     final AMapWidget amap = AMapWidget(
@@ -40,5 +40,4 @@ class _BodyState extends State<_Body> {
       child: amap,
     );
   }
-
 }

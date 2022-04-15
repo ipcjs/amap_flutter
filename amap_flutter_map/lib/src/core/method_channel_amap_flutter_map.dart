@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:amap_flutter_base/amap_flutter_base.dart';
+import 'package:amap_flutter_map/amap_flutter_map.dart';
 import 'package:amap_flutter_map/src/core/amap_flutter_platform.dart';
-import 'package:amap_flutter_map/src/types/types.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -53,7 +52,7 @@ class MethodChannelAMapFlutterMap implements AMapFlutterPlatform {
   }) {
     return channel(mapId).invokeMethod<void>(
       'markers#update',
-      markerUpdates.toMap(),
+      markerUpdates.toAMapJson(),
     );
   }
 
@@ -64,7 +63,7 @@ class MethodChannelAMapFlutterMap implements AMapFlutterPlatform {
   }) {
     return channel(mapId).invokeMethod<void>(
       'polylines#update',
-      polylineUpdates.toMap(),
+      polylineUpdates.toAMapJson(),
     );
   }
 
@@ -75,7 +74,7 @@ class MethodChannelAMapFlutterMap implements AMapFlutterPlatform {
   }) {
     return channel(mapId).invokeMethod<void>(
       'polygons#update',
-      polygonUpdates.toMap(),
+      polygonUpdates.toAMapJson(),
     );
   }
 
@@ -187,8 +186,8 @@ class MethodChannelAMapFlutterMap implements AMapFlutterPlatform {
         }
         break;
       case 'map#onTap':
-        _mapEventStreamController
-            .add(MapTapEvent(mapId, LatLng.fromJson(call.arguments['latLng'])!));
+        _mapEventStreamController.add(
+            MapTapEvent(mapId, LatLng.fromJson(call.arguments['latLng'])!));
         break;
       case 'map#onLongPress':
         _mapEventStreamController.add(MapLongPressEvent(
@@ -198,23 +197,25 @@ class MethodChannelAMapFlutterMap implements AMapFlutterPlatform {
       case 'marker#onTap':
         _mapEventStreamController.add(MarkerTapEvent(
           mapId,
-          call.arguments['markerId'],
+          MarkerId(call.arguments['markerId']),
         ));
         break;
       case 'marker#onDragEnd':
         _mapEventStreamController.add(MarkerDragEndEvent(
             mapId,
             LatLng.fromJson(call.arguments['position'])!,
-            call.arguments['markerId']));
+            MarkerId(call.arguments['markerId'])));
         break;
       case 'polyline#onTap':
-        _mapEventStreamController
-            .add(PolylineTapEvent(mapId, call.arguments['polylineId']));
+        _mapEventStreamController.add(PolylineTapEvent(
+          mapId,
+          PolylineId(call.arguments['polylineId']),
+        ));
         break;
       case 'map#onPoiTouched':
         try {
-          _mapEventStreamController.add(
-              MapPoiTouchEvent(mapId, AMapPoi.fromJson(call.arguments['poi'])!));
+          _mapEventStreamController.add(MapPoiTouchEvent(
+              mapId, AMapPoi.fromJson(call.arguments['poi'])!));
         } catch (e) {
           print('map#onPoiTouched error===>' + e.toString());
         }

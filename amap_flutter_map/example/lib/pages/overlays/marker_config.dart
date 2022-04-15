@@ -31,9 +31,9 @@ class _Body extends StatefulWidget {
 class _State extends State<_Body> {
   static final LatLng mapCenter = const LatLng(39.909187, 116.397451);
 
-  Map<String, Marker> _markers = <String, Marker>{};
+  Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
   BitmapDescriptor? _markerIcon;
-  String? selectedMarkerId;
+  MarkerId? selectedMarkerId;
 
   void _onMapCreated(AMapController controller) {}
 
@@ -72,26 +72,28 @@ class _State extends State<_Body> {
     });
   }
 
+  int _markerIdValue = 0;
   void _add() {
     final int markerCount = _markers.length;
     LatLng markPostion = LatLng(
         mapCenter.latitude + sin(markerCount * pi / 12.0) / 20.0,
         mapCenter.longitude + cos(markerCount * pi / 12.0) / 20.0);
+    final markerId = MarkerId((_markerIdValue++).toString());
     final Marker marker = Marker(
+      markerId: markerId,
       position: markPostion,
       icon: _markerIcon!,
       infoWindow: InfoWindow(title: '第 $markerCount 个Marker'),
-      onTap: (markerId) => _onMarkerTapped(markerId),
-      onDragEnd: (markerId, endPosition) =>
-          _onMarkerDragEnd(markerId, endPosition),
+      onTap: () => _onMarkerTapped(markerId),
+      onDragEnd: (endPosition) => _onMarkerDragEnd(markerId, endPosition),
     );
 
     setState(() {
-      _markers[marker.id] = marker;
+      _markers[marker.markerId] = marker;
     });
   }
 
-  void _onMarkerTapped(String markerId) {
+  void _onMarkerTapped(MarkerId markerId) {
     final Marker? tappedMarker = _markers[markerId];
     final String? title = tappedMarker!.infoWindow.title;
     print('$title 被点击了,markerId: $markerId');
@@ -100,7 +102,7 @@ class _State extends State<_Body> {
     });
   }
 
-  void _onMarkerDragEnd(String markerId, LatLng position) {
+  void _onMarkerDragEnd(MarkerId markerId, LatLng position) {
     final Marker? tappedMarker = _markers[markerId];
     final String? title = tappedMarker!.infoWindow.title;
     print('$title markerId: $markerId 被拖拽到了: $position');
@@ -122,7 +124,7 @@ class _State extends State<_Body> {
     if (_markers.length > 0) {
       setState(() {
         _markers.clear();
-        selectedMarkerId = null.toString();
+        selectedMarkerId = null;
       });
     }
   }
@@ -130,13 +132,12 @@ class _State extends State<_Body> {
   void _changeInfo() async {
     final Marker marker = _markers[selectedMarkerId]!;
     final String newTitle = marker.infoWindow.title! + '*';
-    if(selectedMarkerId != null) {
+    if (selectedMarkerId != null) {
       setState(() {
         _markers[selectedMarkerId!] = marker.copyWith(
           infoWindowParam: marker.infoWindow.copyWith(
             titleParam: newTitle,
           ),
-
         );
       });
     }
@@ -235,7 +236,8 @@ class _State extends State<_Body> {
     ///以下几种获取自定图片的方式使用其中一种即可。
     //最简单的方式
     if (null == _markerIcon) {
-      _markerIcon = BitmapDescriptor.fromIconPath('assets/location_marker.png');
+      _markerIcon =
+          AMapBitmapDescriptor.fromIconPath('assets/location_marker.png');
     }
 
     //通过BitmapDescriptor.fromAssetImage的方式获取图片

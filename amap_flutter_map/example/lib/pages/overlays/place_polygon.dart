@@ -33,8 +33,8 @@ class _State extends State<_Body> {
     Colors.pink,
   ];
 
-  Map<String, Polygon> _polygons = <String, Polygon>{};
-  String? selectedPolygonId;
+  Map<PolygonId, Polygon> _polygons = <PolygonId, Polygon>{};
+  PolygonId? selectedPolygonId;
 
   void _onMapCreated(AMapController controller) {}
 
@@ -55,33 +55,34 @@ class _State extends State<_Body> {
     return points;
   }
 
+  int _polygonIdValue = 0;
   void _add() {
     final Polygon polygon = Polygon(
+      polygonId: PolygonId((_polygonIdValue++).toString()),
       strokeColor: colors[++colorsIndex % colors.length],
       fillColor: colors[++colorsIndex % colors.length],
       strokeWidth: 15,
       points: _createPoints(),
     );
     setState(() {
-      selectedPolygonId = polygon.id;
-      _polygons[polygon.id] = polygon;
+      selectedPolygonId = polygon.polygonId;
+      _polygons[polygon.polygonId] = polygon;
     });
   }
 
   void _remove() {
-    if(selectedPolygonId != null) {
+    if (selectedPolygonId != null) {
       //有选中的Marker
       setState(() {
         _polygons.remove(selectedPolygonId);
       });
     }
-
   }
 
   void _changeStrokeWidth() {
     final Polygon? selectedPolygon = _polygons[selectedPolygonId];
-    if(selectedPolygon != null) {
-      double currentWidth = selectedPolygon.strokeWidth;
+    if (selectedPolygon != null) {
+      int currentWidth = selectedPolygon.strokeWidth;
       if (currentWidth < 50) {
         currentWidth += 10;
       } else {

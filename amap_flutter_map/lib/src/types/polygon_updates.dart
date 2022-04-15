@@ -5,7 +5,8 @@
 import 'dart:ui' show hashValues;
 
 import 'package:flutter/foundation.dart' show setEquals;
-import 'types.dart';
+import 'polygon.dart';
+import 'base_overlay.dart';
 
 /// 该类主要用以描述[Polygon]的增删改等更新操作
 class PolygonUpdates {
@@ -85,7 +86,7 @@ class PolygonUpdates {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
-    if (other is !PolygonUpdates) return false;
+    if (other is! PolygonUpdates) return false;
     final PolygonUpdates typedOther = other;
     return setEquals(polygonsToAdd, typedOther.polygonsToAdd) &&
         setEquals(polygonIdsToRemove, typedOther.polygonIdsToRemove) &&

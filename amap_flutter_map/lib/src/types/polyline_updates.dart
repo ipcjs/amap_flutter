@@ -7,7 +7,7 @@ import 'dart:ui' show hashValues;
 import 'package:flutter/foundation.dart' show setEquals;
 
 import 'polyline.dart';
-import 'types.dart';
+import 'base_overlay.dart';
 
 /// 该类主要用以描述[Polyline]的增删改等更新操作
 class PolylineUpdates {
@@ -87,7 +87,7 @@ class PolylineUpdates {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
-    if (other is !PolylineUpdates) return false;
+    if (other is! PolylineUpdates) return false;
     final PolylineUpdates typedOther = other;
     return setEquals(polylinesToAdd, typedOther.polylinesToAdd) &&
         setEquals(polylineIdsToRemove, typedOther.polylineIdsToRemove) &&

@@ -24,7 +24,7 @@ class _Body extends StatefulWidget {
 class _State extends State<_Body> {
   _State();
 
-  Map<String, Polyline> _polylines = <String, Polyline>{};
+  Map<PolylineId, Polyline> _polylines = <PolylineId, Polyline>{};
   late String selectedPolylineId;
 
   void _onMapCreated(AMapController controller) {}
@@ -41,16 +41,18 @@ class _State extends State<_Body> {
     return points;
   }
 
+  int _polylineIdValue = 0;
   void _add() {
-    final Polyline polyline = Polyline(
+    final Polyline polyline = AMapPolyline(
+        polylineId: PolylineId((_polylineIdValue++).toString()),
         width: 20,
         customTexture:
-            BitmapDescriptor.fromIconPath('assets/texture_green.png'),
-        joinType: JoinType.round,
+            AMapBitmapDescriptor.fromIconPath('assets/texture_green.png'),
+        jointType: JointType.round,
         points: _createPoints());
 
     setState(() {
-      _polylines[polyline.id] = polyline;
+      _polylines[polyline.polylineId] = polyline;
     });
   }
 
@@ -87,7 +89,8 @@ class _State extends State<_Body> {
               child: TextButton(
                 onPressed: _add,
                 style: ButtonStyle(
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10))),
                   //文字颜色
                   foregroundColor: MaterialStateProperty.all(Colors.white),
                   //水波纹颜色

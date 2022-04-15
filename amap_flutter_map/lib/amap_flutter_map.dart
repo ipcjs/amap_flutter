@@ -4,7 +4,10 @@ library amap_flutter_map;
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:amap_flutter_base/amap_flutter_base.dart';
+import 'package:amap_flutter_base/amap_flutter_base.dart'
+    show AMapApiKey, AMapPoi, AMapLocation, AMapPrivacyStatement, AMapUtil;
+export 'package:amap_flutter_base/amap_flutter_base.dart'
+    show AMapApiKey, AMapPoi, AMapLocation, AMapPrivacyStatement;
 import 'package:amap_flutter_map/src/core/amap_flutter_platform.dart';
 import 'package:amap_flutter_map/src/core/map_event.dart';
 import 'package:amap_flutter_map/src/core/method_channel_amap_flutter_map.dart';

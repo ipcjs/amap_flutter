@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 import 'dart:ui' show Color, hashValues;
-import 'package:amap_flutter_base/amap_flutter_base.dart';
 import 'package:amap_flutter_map/amap_flutter_map.dart';
 
 /// 地图类型
@@ -63,8 +62,14 @@ class MinMaxZoomPreference {
   /// 缩放级别范围为[3, 20]，超出范围取边界值
   ///
   const MinMaxZoomPreference(double minZoom, double maxZoom)
-      : this.minZoom = ((minZoom < 3 ? 3 : minZoom) > (maxZoom > 20 ? 20 : maxZoom) ? maxZoom : minZoom),
-        this.maxZoom = ((minZoom < 3 ? 3 : minZoom) > (maxZoom > 20 ? 20 : maxZoom) ? minZoom : maxZoom);
+      : this.minZoom =
+            ((minZoom < 3 ? 3 : minZoom) > (maxZoom > 20 ? 20 : maxZoom)
+                ? maxZoom
+                : minZoom),
+        this.maxZoom =
+            ((minZoom < 3 ? 3 : minZoom) > (maxZoom > 20 ? 20 : maxZoom)
+                ? minZoom
+                : maxZoom);
 
   /// 最小zoomLevel
   final double? minZoom;
@@ -157,7 +162,7 @@ class MyLocationStyleOptions {
     addIfPresent('circleFillColor', circleFillColor?.value);
     addIfPresent('circleStrokeColor', circleStrokeColor?.value);
     addIfPresent('circleStrokeWidth', circleStrokeWidth);
-    addIfPresent('icon', icon?.toMap());
+    addIfPresent('icon', icon?.toJson());
     return json;
   }
 
@@ -165,7 +170,7 @@ class MyLocationStyleOptions {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (runtimeType != other.runtimeType) return false;
-    if (other is !MyLocationStyleOptions) return false;
+    if (other is! MyLocationStyleOptions) return false;
     final MyLocationStyleOptions typedOther = other;
     return enabled == typedOther.enabled &&
         circleFillColor == typedOther.circleFillColor &&
@@ -233,7 +238,7 @@ class CustomStyleOptions {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (runtimeType != other.runtimeType) return false;
-    if (other is !CustomStyleOptions) return false;
+    if (other is! CustomStyleOptions) return false;
     final CustomStyleOptions typedOther = other;
     return enabled == typedOther.enabled &&
         styleData == typedOther.styleData &&

@@ -1,4 +1,3 @@
-import 'package:amap_flutter_base/amap_flutter_base.dart';
 import 'package:amap_flutter_map/amap_flutter_map.dart';
 
 ///地图事件处理
@@ -56,19 +55,19 @@ class _PositionedMapEvent<T> extends MapEvent<T> {
 }
 
 /// [Marker] 的点击事件
-class MarkerTapEvent extends MapEvent<String> {
-  MarkerTapEvent(int mapId, String markerId) : super(mapId, markerId);
+class MarkerTapEvent extends MapEvent<MarkerId> {
+  MarkerTapEvent(int mapId, MarkerId markerId) : super(mapId, markerId);
 }
 
 /// [Marker] 的拖拽结束事件，附带拖拽结束时的位置信息[LatLng].
-class MarkerDragEndEvent extends _PositionedMapEvent<String> {
-  MarkerDragEndEvent(int mapId, LatLng position, String markerId)
+class MarkerDragEndEvent extends _PositionedMapEvent<MarkerId> {
+  MarkerDragEndEvent(int mapId, LatLng position, MarkerId markerId)
       : super(mapId, position, markerId);
 }
 
 /// [Polyline] 的点击事件
-class PolylineTapEvent extends MapEvent<String> {
-  PolylineTapEvent(int mapId, String polylineId) : super(mapId, polylineId);
+class PolylineTapEvent extends MapEvent<PolylineId> {
+  PolylineTapEvent(int mapId, PolylineId polylineId) : super(mapId, polylineId);
 }
 
 /// Poi点击事件

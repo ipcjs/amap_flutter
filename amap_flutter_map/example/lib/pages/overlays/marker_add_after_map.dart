@@ -19,13 +19,15 @@ class _Body extends StatefulWidget {
 class _BodyState extends State<_Body> {
   static final LatLng defaultPosition = const LatLng(39.909187, 116.397451);
   //需要先设置一个空的map赋值给AMapWidget的markers，否则后续无法添加marker
-  final Map<String, Marker> _markers = <String, Marker>{};
+  final _markers = <MarkerId, Marker>{};
+  int markerIdValue = 0;
   LatLng _currentLatLng = defaultPosition;
   //添加一个marker
   void _addMarker() {
     final _markerPosition =
         LatLng(_currentLatLng.latitude, _currentLatLng.longitude + 2 / 1000);
     final Marker marker = Marker(
+      markerId: MarkerId((markerIdValue++).toString()),
       position: _markerPosition,
       //使用默认hue的方式设置Marker的图标
       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
@@ -34,7 +36,7 @@ class _BodyState extends State<_Body> {
     setState(() {
       _currentLatLng = _markerPosition;
       //将新的marker添加到map里
-      _markers[marker.id] = marker;
+      _markers[marker.markerId] = marker;
     });
   }
 
@@ -42,7 +44,8 @@ class _BodyState extends State<_Body> {
     return TextButton(
       onPressed: onPressed,
       style: ButtonStyle(
-        shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+        shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
         //文字颜色
         foregroundColor: MaterialStateProperty.all(Colors.white),
         //水波纹颜色
