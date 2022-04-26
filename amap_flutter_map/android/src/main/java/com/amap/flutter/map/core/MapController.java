@@ -3,9 +3,6 @@ package com.amap.flutter.map.core;
 import android.graphics.Bitmap;
 import android.location.Location;
 
-
-import androidx.annotation.NonNull;
-
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdate;
 import com.amap.api.maps.CameraUpdateFactory;
@@ -25,6 +22,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
@@ -111,6 +109,7 @@ public class MapController
                     final Object durationObject = call.argument("duration");
 
                     moveCamera(cameraUpdate, animatedObject, durationObject);
+                    result.success(null);
                 }
                 break;
             case Const.METHOD_MAP_SET_RENDER_FPS:
