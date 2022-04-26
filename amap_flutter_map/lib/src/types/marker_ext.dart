@@ -21,14 +21,23 @@ extension MarkerExt on google.Marker {
     addIfPresent('id', markerId.value);
     addIfPresent('alpha', alpha);
     addIfPresent('anchor', anchor.toJson());
-    // 不知道是否支持
+    // 在Google地图上, consumeTapEvents表示点击Marker时, 是否自己处理事件
+    // 为false时(默认), 会回调onTap, 同时执行默认的行为(居中+显示InfoWindows)
+    // 为true时, 只回调onTap, 不执行默认的行为
+    //
+    // 在高德地图上, 由两个属性控制相关行为
+    // clickable, 控制Marker是否可点击, 若为false, 点击完全无效, 不回调onTap, 也不显示InfoWindow
+    // infoWindowEnable, 控制点击时是否显示infoWindow
+    //
+    // 这么我们模仿Google的行为, 但高德当前不支持点击移动到中心点...
     // addIfPresent('consumeTapEvents', consumeTapEvents);
-    addIfPresent('clickable', onTap != null);
+    addIfPresent('clickable', true);
+    addIfPresent('infoWindowEnable', !consumeTapEvents);
+
     addIfPresent('draggable', draggable);
     // 不支持
     // addIfPresent('flat', flat);
     addIfPresent('icon', icon.toJson());
-    addIfPresent('infoWindowEnable', infoWindow != google.InfoWindow.noText);
     addIfPresent('infoWindow', infoWindow._toAMapJson());
     addIfPresent('position', position.toJson());
     addIfPresent('rotation', rotation);
