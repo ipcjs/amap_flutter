@@ -2,15 +2,12 @@ package com.amap.flutter.map.overlays.marker;
 
 import android.text.TextUtils;
 
-import androidx.annotation.NonNull;
-
 import com.amap.api.maps.AMap;
-import com.amap.api.maps.TextureMapView;
+import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.Poi;
-import com.amap.api.maps.model.Polyline;
 import com.amap.flutter.map.MyMethodCallHandler;
 import com.amap.flutter.map.overlays.AbstractOverlayController;
 import com.amap.flutter.map.utils.Const;
@@ -21,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
@@ -173,6 +171,17 @@ public class MarkersController
         }
     }
 
+    private void moveCameraToMarker(String dartMarkId) {
+        MarkerController markerController = controllerMapByDartId.get(dartMarkId);
+        if (null != markerController
+                // Google地图的Flutter插件中, 是否开启InfoWindow和是否在点击时移动到中心点是通过一个属性(consumeTapEvents)控制的
+                // 高德模仿它的行为, 使用infoWindowEnable统一控制
+                && markerController.isInfoWindowEnable()
+                && null != markerController.getPosition()) {
+            amap.animateCamera(CameraUpdateFactory.newLatLng(markerController.getPosition()));
+        }
+    }
+
     @Override
     public void onMapClick(LatLng latLng) {
         hideMarkerInfoWindow(selectedMarkerDartId, null);
@@ -188,6 +197,7 @@ public class MarkersController
         data.put("markerId", dartId);
         selectedMarkerDartId = dartId;
         showMarkerInfoWindow(dartId);
+        moveCameraToMarker(dartId);
         methodChannel.invokeMethod("marker#onTap", data);
         LogUtil.i(CLASS_NAME, "onMarkerClick==>" + data);
         return true;

@@ -36,6 +36,11 @@ class MarkerController implements MarkerOptionsSink {
         return null;
     }
 
+    public boolean isInfoWindowEnable(){
+        // marker理论上来说不可能为null
+        return marker.isInfoWindowEnable();
+    }
+
     @Override
     public void setAlpha(float alpha) {
         marker.setAlpha(alpha);
