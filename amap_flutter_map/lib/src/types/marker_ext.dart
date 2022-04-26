@@ -35,8 +35,8 @@ extension MarkerExt on google.Marker {
     addIfPresent('infoWindowEnable', !consumeTapEvents);
 
     addIfPresent('draggable', draggable);
-    // 不支持
-    // addIfPresent('flat', flat);
+    // Dart没写, 但Native层是支持的
+    addIfPresent('flat', flat);
     addIfPresent('icon', icon.toJson());
     addIfPresent('infoWindow', infoWindow._toAMapJson());
     addIfPresent('position', position.toJson());
