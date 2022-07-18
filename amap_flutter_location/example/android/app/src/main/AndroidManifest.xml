@@ -14,7 +14,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <application
-        android:name="io.flutter.app.FlutterApplication"
+        android:name="${applicationName}"
         android:label="amap_flutter_location_example"
         android:icon="@mipmap/ic_launcher">
         <service android:name="com.amap.api.location.APSService"/>
