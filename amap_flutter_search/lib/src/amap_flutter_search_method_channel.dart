@@ -21,16 +21,25 @@ class MethodChannelAmapFlutterSearch extends AmapFlutterSearchPlatform {
     AMapApiKey? apiKey,
     AMapPrivacyStatement? privacyStatement,
   }) async {
-    await _api.setApiKey((Platform.isIOS //
-            ? apiKey?.iosKey
-            : apiKey?.androidKey) ??
-        '');
-    await _api.updatePrivacyShow(
-      privacyStatement?.hasContains ?? false,
-      privacyStatement?.hasShow ?? false,
-    );
-    await _api.updatePrivacyAgree(
-      privacyStatement?.hasAgree ?? false,
-    );
+    final platformKey = Platform.isIOS //
+        ? apiKey?.iosKey
+        : apiKey?.androidKey;
+    if (platformKey != null) {
+      await _api.setApiKey(platformKey);
+    }
+
+    if (privacyStatement?.hasContains != null ||
+        privacyStatement?.hasShow != null) {
+      await _api.updatePrivacyShow(
+        privacyStatement?.hasContains ?? false,
+        privacyStatement?.hasShow ?? false,
+      );
+    }
+
+    if (privacyStatement?.hasAgree != null) {
+      await _api.updatePrivacyAgree(
+        privacyStatement?.hasAgree ?? false,
+      );
+    }
   }
 }

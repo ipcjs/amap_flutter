@@ -5,6 +5,19 @@ import 'package:flutter/services.dart';
 import 'package:amap_flutter_search/amap_flutter_search.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  AmapFlutterSearch().init(
+    apiKey: const AMapApiKey(
+      androidKey: '011689ce44dada05b481e7a5b46f361d',
+      iosKey: 'd50ed2c21af0d0a4d1cc9983d36fdb68',
+    ),
+    privacyStatement: const AMapPrivacyStatement(
+      hasContains: true,
+      hasShow: true,
+      hasAgree: true,
+    ),
+  );
   runApp(const MyApp());
 }
 
@@ -31,8 +44,8 @@ class _MyAppState extends State<MyApp> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
     try {
-      platformVersion =
-          await _amapFlutterSearchPlugin.getPlatformVersion() ?? 'Unknown platform version';
+      platformVersion = await _amapFlutterSearchPlugin.getPlatformVersion() ??
+          'Unknown platform version';
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }

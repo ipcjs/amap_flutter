@@ -1,3 +1,9 @@
+/// 高德地图搜索功能
+library amap_flutter_search;
+
+export 'package:amap_flutter_base/amap_flutter_base.dart'
+    show AMapApiKey, AMapPrivacyStatement;
+
 import 'package:amap_flutter_base/amap_flutter_base.dart';
 
 import 'amap_flutter_search_platform_interface.dart';
