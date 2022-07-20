@@ -83,4 +83,65 @@ void AmapSearchHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject
       [channel setMessageHandler:nil];
     }
   }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.SearchHostApi.setApiKey"
+        binaryMessenger:binaryMessenger
+        codec:AmapSearchHostApiGetCodec()        ];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(setApiKeyApiKey:error:)], @"AmapSearchHostApi api (%@) doesn't respond to @selector(setApiKeyApiKey:error:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_apiKey = GetNullableObjectAtIndex(args, 0);
+        FlutterError *error;
+        [api setApiKeyApiKey:arg_apiKey error:&error];
+        callback(wrapResult(nil, error));
+      }];
+    }
+    else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.SearchHostApi.updatePrivacyShow"
+        binaryMessenger:binaryMessenger
+        codec:AmapSearchHostApiGetCodec()        ];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(updatePrivacyShowIsContains:isShow:error:)], @"AmapSearchHostApi api (%@) doesn't respond to @selector(updatePrivacyShowIsContains:isShow:error:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSNumber *arg_isContains = GetNullableObjectAtIndex(args, 0);
+        NSNumber *arg_isShow = GetNullableObjectAtIndex(args, 1);
+        FlutterError *error;
+        [api updatePrivacyShowIsContains:arg_isContains isShow:arg_isShow error:&error];
+        callback(wrapResult(nil, error));
+      }];
+    }
+    else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.SearchHostApi.updatePrivacyAgree"
+        binaryMessenger:binaryMessenger
+        codec:AmapSearchHostApiGetCodec()        ];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(updatePrivacyAgreeIsAgree:error:)], @"AmapSearchHostApi api (%@) doesn't respond to @selector(updatePrivacyAgreeIsAgree:error:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSNumber *arg_isAgree = GetNullableObjectAtIndex(args, 0);
+        FlutterError *error;
+        [api updatePrivacyAgreeIsAgree:arg_isAgree error:&error];
+        callback(wrapResult(nil, error));
+      }];
+    }
+    else {
+      [channel setMessageHandler:nil];
+    }
+  }
 }

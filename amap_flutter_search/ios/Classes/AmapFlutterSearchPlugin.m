@@ -14,4 +14,20 @@
     return [@"iOS" stringByAppendingString:[[UIDevice currentDevice] systemVersion]];
 }
 
+
+- (void)setApiKeyApiKey:(nonnull NSString *)apiKey error:(FlutterError * _Nullable __autoreleasing * _Nonnull)error {
+    // TODO: impl
+}
+
+
+- (void)updatePrivacyAgreeIsAgree:(nonnull NSNumber *)isAgree error:(FlutterError * _Nullable __autoreleasing * _Nonnull)error {
+    // TODO: impl
+}
+
+
+- (void)updatePrivacyShowIsContains:(nonnull NSNumber *)isContains isShow:(nonnull NSNumber *)isShow error:(FlutterError * _Nullable __autoreleasing * _Nonnull)error {
+    // TODO: impl
+}
+
+
 @end

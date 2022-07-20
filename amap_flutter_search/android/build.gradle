@@ -32,4 +32,8 @@ android {
     defaultConfig {
         minSdkVersion 16
     }
+
+    dependencies {
+        implementation 'com.amap.api:search:9.3.1'
+    }
 }

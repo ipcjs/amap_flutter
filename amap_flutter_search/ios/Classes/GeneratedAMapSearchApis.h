@@ -15,6 +15,9 @@ NSObject<FlutterMessageCodec> *AmapSearchHostApiGetCodec(void);
 @protocol AmapSearchHostApi
 /// @return `nil` only when `error != nil`.
 - (nullable NSString *)getPlatformVersionWithError:(FlutterError *_Nullable *_Nonnull)error;
+- (void)setApiKeyApiKey:(NSString *)apiKey error:(FlutterError *_Nullable *_Nonnull)error;
+- (void)updatePrivacyShowIsContains:(NSNumber *)isContains isShow:(NSNumber *)isShow error:(FlutterError *_Nullable *_Nonnull)error;
+- (void)updatePrivacyAgreeIsAgree:(NSNumber *)isAgree error:(FlutterError *_Nullable *_Nonnull)error;
 @end
 
 extern void AmapSearchHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<AmapSearchHostApi> *_Nullable api);

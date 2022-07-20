@@ -1,3 +1,4 @@
+import 'package:amap_flutter_base/amap_flutter_base.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:amap_flutter_search/amap_flutter_search.dart';
 import 'package:amap_flutter_search/amap_flutter_search_platform_interface.dart';
@@ -9,6 +10,14 @@ class MockAmapFlutterSearchPlatform
     implements AmapFlutterSearchPlatform {
   @override
   Future<String?> getPlatformVersion() => Future.value('42');
+
+  @override
+  Future<void> init({
+    AMapApiKey? apiKey,
+    AMapPrivacyStatement? privacyStatement,
+  }) async {
+    // no-op
+  }
 }
 
 void main() {

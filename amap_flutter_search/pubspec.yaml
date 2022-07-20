@@ -11,12 +11,17 @@ dependencies:
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.0.2
+  amap_flutter_base: ^3.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
   pigeon: ^3.2.3
+
+dependency_overrides:
+  amap_flutter_base:
+    path: ../amap_flutter_base
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

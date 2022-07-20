@@ -1,3 +1,4 @@
+import 'package:amap_flutter_base/amap_flutter_base.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'src/amap_flutter_search_method_channel.dart';
@@ -25,5 +26,12 @@ abstract class AmapFlutterSearchPlatform extends PlatformInterface {
 
   Future<String?> getPlatformVersion() {
     throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
+  Future<void> init({
+    AMapApiKey? apiKey,
+    AMapPrivacyStatement? privacyStatement,
+  }) {
+    throw UnimplementedError('init() has not been implemented.');
   }
 }
