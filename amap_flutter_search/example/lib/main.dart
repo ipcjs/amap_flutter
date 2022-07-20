@@ -29,7 +29,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
+  String _message = 'Unknown';
   final _amapFlutterSearchPlugin = AmapFlutterSearch();
 
   @override
@@ -56,7 +56,7 @@ class _MyAppState extends State<MyApp> {
     if (!mounted) return;
 
     setState(() {
-      _platformVersion = platformVersion;
+      _message = platformVersion;
     });
   }
 
@@ -67,8 +67,18 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+        body: InkWell(
+          onTap: () async {
+            final result = await _amapFlutterSearchPlugin.queryPoi();
+            if (mounted) {
+              setState(() {
+                _message = result.toString();
+              });
+            }
+          },
+          child: Center(
+            child: Text('message: $_message\n'),
+          ),
         ),
       ),
     );

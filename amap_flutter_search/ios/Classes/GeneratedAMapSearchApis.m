@@ -31,15 +31,65 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
 }
 
 
+@interface AmapQueryPoiResult ()
++ (AmapQueryPoiResult *)fromMap:(NSDictionary *)dict;
++ (nullable AmapQueryPoiResult *)nullableFromMap:(NSDictionary *)dict;
+- (NSDictionary *)toMap;
+@end
+
+@implementation AmapQueryPoiResult
++ (instancetype)makeWithResult:(nullable NSDictionary<NSString *, id> *)result
+    code:(NSNumber *)code {
+  AmapQueryPoiResult* pigeonResult = [[AmapQueryPoiResult alloc] init];
+  pigeonResult.result = result;
+  pigeonResult.code = code;
+  return pigeonResult;
+}
++ (AmapQueryPoiResult *)fromMap:(NSDictionary *)dict {
+  AmapQueryPoiResult *pigeonResult = [[AmapQueryPoiResult alloc] init];
+  pigeonResult.result = GetNullableObject(dict, @"result");
+  pigeonResult.code = GetNullableObject(dict, @"code");
+  NSAssert(pigeonResult.code != nil, @"");
+  return pigeonResult;
+}
++ (nullable AmapQueryPoiResult *)nullableFromMap:(NSDictionary *)dict { return (dict) ? [AmapQueryPoiResult fromMap:dict] : nil; }
+- (NSDictionary *)toMap {
+  return @{
+    @"result" : (self.result ?: [NSNull null]),
+    @"code" : (self.code ?: [NSNull null]),
+  };
+}
+@end
 
 @interface AmapSearchHostApiCodecReader : FlutterStandardReader
 @end
 @implementation AmapSearchHostApiCodecReader
+- (nullable id)readValueOfType:(UInt8)type 
+{
+  switch (type) {
+    case 128:     
+      return [AmapQueryPoiResult fromMap:[self readValue]];
+    
+    default:    
+      return [super readValueOfType:type];
+    
+  }
+}
 @end
 
 @interface AmapSearchHostApiCodecWriter : FlutterStandardWriter
 @end
 @implementation AmapSearchHostApiCodecWriter
+- (void)writeValue:(id)value 
+{
+  if ([value isKindOfClass:[AmapQueryPoiResult class]]) {
+    [self writeByte:128];
+    [self writeValue:[value toMap]];
+  } else 
+{
+    [super writeValue:value];
+  }
+}
 @end
 
 @interface AmapSearchHostApiCodecReaderWriter : FlutterStandardReaderWriter
@@ -138,6 +188,24 @@ void AmapSearchHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject
         FlutterError *error;
         [api updatePrivacyAgreeIsAgree:arg_isAgree error:&error];
         callback(wrapResult(nil, error));
+      }];
+    }
+    else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.SearchHostApi.queryPoi"
+        binaryMessenger:binaryMessenger
+        codec:AmapSearchHostApiGetCodec()        ];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(queryPoiWithCompletion:)], @"AmapSearchHostApi api (%@) doesn't respond to @selector(queryPoiWithCompletion:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        [api queryPoiWithCompletion:^(AmapQueryPoiResult *_Nullable output, FlutterError *_Nullable error) {
+          callback(wrapResult(output, error));
+        }];
       }];
     }
     else {

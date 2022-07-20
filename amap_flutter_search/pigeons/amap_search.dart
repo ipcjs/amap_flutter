@@ -23,4 +23,13 @@ abstract class SearchHostApi {
   void updatePrivacyShow(bool isContains, bool isShow);
 
   void updatePrivacyAgree(bool isAgree);
+
+  @async
+  QueryPoiResult queryPoi();
+}
+
+class QueryPoiResult {
+  QueryPoiResult(this.result, this.code);
+  Map<String?, Object?>? result;
+  int code;
 }

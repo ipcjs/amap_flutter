@@ -29,4 +29,6 @@ class AmapFlutterSearch {
         apiKey: apiKey,
         privacyStatement: privacyStatement,
       );
+
+  Future<Map<String, dynamic>> queryPoi() => _platform.queryPoi();
 }

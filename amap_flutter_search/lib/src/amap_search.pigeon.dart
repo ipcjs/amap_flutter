@@ -7,8 +7,54 @@ import 'dart:typed_data' show Uint8List, Int32List, Int64List, Float64List;
 import 'package:flutter/foundation.dart' show WriteBuffer, ReadBuffer;
 import 'package:flutter/services.dart';
 
+class QueryPoiResult {
+  QueryPoiResult({
+    this.result,
+    required this.code,
+  });
+
+  Map<String?, Object?>? result;
+  int code;
+
+  Object encode() {
+    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
+    pigeonMap['result'] = result;
+    pigeonMap['code'] = code;
+    return pigeonMap;
+  }
+
+  static QueryPoiResult decode(Object message) {
+    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+    return QueryPoiResult(
+      result: (pigeonMap['result'] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+      code: pigeonMap['code']! as int,
+    );
+  }
+}
+
 class _SearchHostApiCodec extends StandardMessageCodec {
   const _SearchHostApiCodec();
+  @override
+  void writeValue(WriteBuffer buffer, Object? value) {
+    if (value is QueryPoiResult) {
+      buffer.putUint8(128);
+      writeValue(buffer, value.encode());
+    } else 
+{
+      super.writeValue(buffer, value);
+    }
+  }
+  @override
+  Object? readValueOfType(int type, ReadBuffer buffer) {
+    switch (type) {
+      case 128:       
+        return QueryPoiResult.decode(readValue(buffer)!);
+      
+      default:      
+        return super.readValueOfType(type, buffer);
+      
+    }
+  }
 }
 
 class SearchHostApi {
@@ -111,6 +157,33 @@ class SearchHostApi {
       );
     } else {
       return;
+    }
+  }
+
+  Future<QueryPoiResult> queryPoi() async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.SearchHostApi.queryPoi', codec, binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap =
+        await channel.send(null) as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else if (replyMap['result'] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (replyMap['result'] as QueryPoiResult?)!;
     }
   }
 }

@@ -34,4 +34,8 @@ abstract class AmapFlutterSearchPlatform extends PlatformInterface {
   }) {
     throw UnimplementedError('init() has not been implemented.');
   }
+
+  Future<Map<String, dynamic>> queryPoi() {
+    throw UnimplementedError('queryPoi() has not been implemented.');
+  }
 }

@@ -21,9 +21,88 @@ import java.util.HashMap;
 /** Generated class from Pigeon. */
 @SuppressWarnings({"unused", "unchecked", "CodeBlock2Expr", "RedundantSuppression"})
 public class GeneratedAMapSearchApis {
+
+  /** Generated class from Pigeon that represents data sent in messages. */
+  public static class QueryPoiResult {
+    private @Nullable Map<String, Object> result;
+    public @Nullable Map<String, Object> getResult() { return result; }
+    public void setResult(@Nullable Map<String, Object> setterArg) {
+      this.result = setterArg;
+    }
+
+    private @NonNull Long code;
+    public @NonNull Long getCode() { return code; }
+    public void setCode(@NonNull Long setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"code\" is null.");
+      }
+      this.code = setterArg;
+    }
+
+    /** Constructor is private to enforce null safety; use Builder. */
+    private QueryPoiResult() {}
+    public static final class Builder {
+      private @Nullable Map<String, Object> result;
+      public @NonNull Builder setResult(@Nullable Map<String, Object> setterArg) {
+        this.result = setterArg;
+        return this;
+      }
+      private @Nullable Long code;
+      public @NonNull Builder setCode(@NonNull Long setterArg) {
+        this.code = setterArg;
+        return this;
+      }
+      public @NonNull QueryPoiResult build() {
+        QueryPoiResult pigeonReturn = new QueryPoiResult();
+        pigeonReturn.setResult(result);
+        pigeonReturn.setCode(code);
+        return pigeonReturn;
+      }
+    }
+    @NonNull Map<String, Object> toMap() {
+      Map<String, Object> toMapResult = new HashMap<>();
+      toMapResult.put("result", result);
+      toMapResult.put("code", code);
+      return toMapResult;
+    }
+    static @NonNull QueryPoiResult fromMap(@NonNull Map<String, Object> map) {
+      QueryPoiResult pigeonResult = new QueryPoiResult();
+      Object result = map.get("result");
+      pigeonResult.setResult((Map<String, Object>)result);
+      Object code = map.get("code");
+      pigeonResult.setCode((code == null) ? null : ((code instanceof Integer) ? (Integer)code : (Long)code));
+      return pigeonResult;
+    }
+  }
+
+  public interface Result<T> {
+    void success(T result);
+    void error(Throwable error);
+  }
   private static class SearchHostApiCodec extends StandardMessageCodec {
     public static final SearchHostApiCodec INSTANCE = new SearchHostApiCodec();
     private SearchHostApiCodec() {}
+    @Override
+    protected Object readValueOfType(byte type, ByteBuffer buffer) {
+      switch (type) {
+        case (byte)128:         
+          return QueryPoiResult.fromMap((Map<String, Object>) readValue(buffer));
+        
+        default:        
+          return super.readValueOfType(type, buffer);
+        
+      }
+    }
+    @Override
+    protected void writeValue(ByteArrayOutputStream stream, Object value)     {
+      if (value instanceof QueryPoiResult) {
+        stream.write(128);
+        writeValue(stream, ((QueryPoiResult) value).toMap());
+      } else 
+{
+        super.writeValue(stream, value);
+      }
+    }
   }
 
   /** Generated interface from Pigeon that represents a handler of messages from Flutter.*/
@@ -32,6 +111,7 @@ public class GeneratedAMapSearchApis {
     void setApiKey(@NonNull String apiKey);
     void updatePrivacyShow(@NonNull Boolean isContains, @NonNull Boolean isShow);
     void updatePrivacyAgree(@NonNull Boolean isAgree);
+    void queryPoi(Result<QueryPoiResult> result);
 
     /** The codec used by SearchHostApi. */
     static MessageCodec<Object> getCodec() {
@@ -130,6 +210,35 @@ public class GeneratedAMapSearchApis {
               wrapped.put("error", wrapError(exception));
             }
             reply.reply(wrapped);
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.SearchHostApi.queryPoi", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              Result<QueryPoiResult> resultCallback = new Result<QueryPoiResult>() {
+                public void success(QueryPoiResult result) {
+                  wrapped.put("result", result);
+                  reply.reply(wrapped);
+                }
+                public void error(Throwable error) {
+                  wrapped.put("error", wrapError(error));
+                  reply.reply(wrapped);
+                }
+              };
+
+              api.queryPoi(resultCallback);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+              reply.reply(wrapped);
+            }
           });
         } else {
           channel.setMessageHandler(null);

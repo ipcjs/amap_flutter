@@ -18,6 +18,12 @@ class MockAmapFlutterSearchPlatform
   }) async {
     // no-op
   }
+
+  @override
+  Future<Map<String, dynamic>> queryPoi() {
+    // TODO: implement queryPoi
+    throw UnimplementedError();
+  }
 }
 
 void main() {

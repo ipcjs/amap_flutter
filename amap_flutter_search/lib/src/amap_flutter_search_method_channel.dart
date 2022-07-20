@@ -42,4 +42,23 @@ class MethodChannelAmapFlutterSearch extends AmapFlutterSearchPlatform {
       );
     }
   }
+
+  @override
+  Future<Map<String, dynamic>> queryPoi() => _api.queryPoi() //
+          .then((result) {
+        if (result.code == 1000) {
+          return result.result!.cast<String, dynamic>();
+        }
+        return Future<Map<String, dynamic>>.error(AMapException(
+          code: result.code,
+          message: 'queryPoi() failed.',
+        ));
+      });
+}
+
+class AMapException implements Exception {
+  const AMapException({required this.code, this.message});
+
+  final int code;
+  final String? message;
 }

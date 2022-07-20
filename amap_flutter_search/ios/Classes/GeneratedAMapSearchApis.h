@@ -8,6 +8,16 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class AmapQueryPoiResult;
+
+@interface AmapQueryPoiResult : NSObject
+/// `init` unavailable to enforce nonnull fields, see the `make` class method.
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)makeWithResult:(nullable NSDictionary<NSString *, id> *)result
+    code:(NSNumber *)code;
+@property(nonatomic, strong, nullable) NSDictionary<NSString *, id> * result;
+@property(nonatomic, strong) NSNumber * code;
+@end
 
 /// The codec used by AmapSearchHostApi.
 NSObject<FlutterMessageCodec> *AmapSearchHostApiGetCodec(void);
@@ -18,6 +28,7 @@ NSObject<FlutterMessageCodec> *AmapSearchHostApiGetCodec(void);
 - (void)setApiKeyApiKey:(NSString *)apiKey error:(FlutterError *_Nullable *_Nonnull)error;
 - (void)updatePrivacyShowIsContains:(NSNumber *)isContains isShow:(NSNumber *)isShow error:(FlutterError *_Nullable *_Nonnull)error;
 - (void)updatePrivacyAgreeIsAgree:(NSNumber *)isAgree error:(FlutterError *_Nullable *_Nonnull)error;
+- (void)queryPoiWithCompletion:(void(^)(AmapQueryPoiResult *_Nullable, FlutterError *_Nullable))completion;
 @end
 
 extern void AmapSearchHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<AmapSearchHostApi> *_Nullable api);
