@@ -1,0 +1,22 @@
+PODS:
+  - amap_flutter_search (0.0.1):
+    - Flutter
+  - Flutter (1.0.0)
+
+DEPENDENCIES:
+  - amap_flutter_search (from `.symlinks/plugins/amap_flutter_search/ios`)
+  - Flutter (from `Flutter`)
+
+EXTERNAL SOURCES:
+  amap_flutter_search:
+    :path: ".symlinks/plugins/amap_flutter_search/ios"
+  Flutter:
+    :path: Flutter
+
+SPEC CHECKSUMS:
+  amap_flutter_search: 27fdc3e05dd447073c708098ac986f0422df0c2a
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+
+PODFILE CHECKSUM: 8e679eca47255a8ca8067c4c67aab20e64cb974d
+
+COCOAPODS: 1.11.3

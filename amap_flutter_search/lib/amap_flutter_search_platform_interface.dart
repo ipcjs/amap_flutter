@@ -1,6 +1,6 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-import 'amap_flutter_search_method_channel.dart';
+import 'src/amap_flutter_search_method_channel.dart';
 
 abstract class AmapFlutterSearchPlatform extends PlatformInterface {
   /// Constructs a AmapFlutterSearchPlatform.
@@ -14,7 +14,7 @@ abstract class AmapFlutterSearchPlatform extends PlatformInterface {
   ///
   /// Defaults to [MethodChannelAmapFlutterSearch].
   static AmapFlutterSearchPlatform get instance => _instance;
-  
+
   /// Platform-specific implementations should set this with their own
   /// platform-specific class that extends [AmapFlutterSearchPlatform] when
   /// they register themselves.

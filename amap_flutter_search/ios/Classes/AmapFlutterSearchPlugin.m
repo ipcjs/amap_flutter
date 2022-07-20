@@ -1,20 +1,17 @@
 #import "AmapFlutterSearchPlugin.h"
+#import "GeneratedAMapSearchApis.h"
+
+@interface AmapFlutterSearchPlugin () <AmapSearchHostApi>
+@end
 
 @implementation AmapFlutterSearchPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
-  FlutterMethodChannel* channel = [FlutterMethodChannel
-      methodChannelWithName:@"amap_flutter_search"
-            binaryMessenger:[registrar messenger]];
   AmapFlutterSearchPlugin* instance = [[AmapFlutterSearchPlugin alloc] init];
-  [registrar addMethodCallDelegate:instance channel:channel];
+  AmapSearchHostApiSetup(registrar.messenger, instance);
 }
 
-- (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
-  if ([@"getPlatformVersion" isEqualToString:call.method]) {
-    result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
-  } else {
-    result(FlutterMethodNotImplemented);
-  }
+- (nullable NSString *)getPlatformVersionWithError:(FlutterError * _Nullable __autoreleasing * _Nonnull)error {
+    return [@"iOS" stringByAppendingString:[[UIDevice currentDevice] systemVersion]];
 }
 
 @end
