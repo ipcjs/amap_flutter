@@ -31,31 +31,35 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
 }
 
 
-@interface AmapQueryPoiResult ()
-+ (AmapQueryPoiResult *)fromMap:(NSDictionary *)dict;
-+ (nullable AmapQueryPoiResult *)nullableFromMap:(NSDictionary *)dict;
+@interface AmapApiResult ()
++ (AmapApiResult *)fromMap:(NSDictionary *)dict;
++ (nullable AmapApiResult *)nullableFromMap:(NSDictionary *)dict;
 - (NSDictionary *)toMap;
 @end
 
-@implementation AmapQueryPoiResult
-+ (instancetype)makeWithResult:(nullable NSDictionary<NSString *, id> *)result
+@implementation AmapApiResult
++ (instancetype)makeWithData:(nullable NSDictionary<NSString *, id> *)data
+    message:(nullable NSString *)message
     code:(NSNumber *)code {
-  AmapQueryPoiResult* pigeonResult = [[AmapQueryPoiResult alloc] init];
-  pigeonResult.result = result;
+  AmapApiResult* pigeonResult = [[AmapApiResult alloc] init];
+  pigeonResult.data = data;
+  pigeonResult.message = message;
   pigeonResult.code = code;
   return pigeonResult;
 }
-+ (AmapQueryPoiResult *)fromMap:(NSDictionary *)dict {
-  AmapQueryPoiResult *pigeonResult = [[AmapQueryPoiResult alloc] init];
-  pigeonResult.result = GetNullableObject(dict, @"result");
++ (AmapApiResult *)fromMap:(NSDictionary *)dict {
+  AmapApiResult *pigeonResult = [[AmapApiResult alloc] init];
+  pigeonResult.data = GetNullableObject(dict, @"data");
+  pigeonResult.message = GetNullableObject(dict, @"message");
   pigeonResult.code = GetNullableObject(dict, @"code");
   NSAssert(pigeonResult.code != nil, @"");
   return pigeonResult;
 }
-+ (nullable AmapQueryPoiResult *)nullableFromMap:(NSDictionary *)dict { return (dict) ? [AmapQueryPoiResult fromMap:dict] : nil; }
++ (nullable AmapApiResult *)nullableFromMap:(NSDictionary *)dict { return (dict) ? [AmapApiResult fromMap:dict] : nil; }
 - (NSDictionary *)toMap {
   return @{
-    @"result" : (self.result ?: [NSNull null]),
+    @"data" : (self.data ?: [NSNull null]),
+    @"message" : (self.message ?: [NSNull null]),
     @"code" : (self.code ?: [NSNull null]),
   };
 }
@@ -68,7 +72,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
 {
   switch (type) {
     case 128:     
-      return [AmapQueryPoiResult fromMap:[self readValue]];
+      return [AmapApiResult fromMap:[self readValue]];
     
     default:    
       return [super readValueOfType:type];
@@ -82,7 +86,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
 @implementation AmapSearchHostApiCodecWriter
 - (void)writeValue:(id)value 
 {
-  if ([value isKindOfClass:[AmapQueryPoiResult class]]) {
+  if ([value isKindOfClass:[AmapApiResult class]]) {
     [self writeByte:128];
     [self writeValue:[value toMap]];
   } else 
@@ -197,13 +201,23 @@ void AmapSearchHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject
   {
     FlutterBasicMessageChannel *channel =
       [[FlutterBasicMessageChannel alloc]
-        initWithName:@"dev.flutter.pigeon.SearchHostApi.queryPoi"
+        initWithName:@"dev.flutter.pigeon.SearchHostApi.searchPoi"
         binaryMessenger:binaryMessenger
         codec:AmapSearchHostApiGetCodec()        ];
     if (api) {
-      NSCAssert([api respondsToSelector:@selector(queryPoiWithCompletion:)], @"AmapSearchHostApi api (%@) doesn't respond to @selector(queryPoiWithCompletion:)", api);
+      NSCAssert([api respondsToSelector:@selector(searchPoiPageNum:pageSize:query:ctgr:city:center:radiusInMeters:isDistanceSort:extensions:completion:)], @"AmapSearchHostApi api (%@) doesn't respond to @selector(searchPoiPageNum:pageSize:query:ctgr:city:center:radiusInMeters:isDistanceSort:extensions:completion:)", api);
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
-        [api queryPoiWithCompletion:^(AmapQueryPoiResult *_Nullable output, FlutterError *_Nullable error) {
+        NSArray *args = message;
+        NSNumber *arg_pageNum = GetNullableObjectAtIndex(args, 0);
+        NSNumber *arg_pageSize = GetNullableObjectAtIndex(args, 1);
+        NSString *arg_query = GetNullableObjectAtIndex(args, 2);
+        NSString *arg_ctgr = GetNullableObjectAtIndex(args, 3);
+        NSString *arg_city = GetNullableObjectAtIndex(args, 4);
+        id arg_center = GetNullableObjectAtIndex(args, 5);
+        NSNumber *arg_radiusInMeters = GetNullableObjectAtIndex(args, 6);
+        NSNumber *arg_isDistanceSort = GetNullableObjectAtIndex(args, 7);
+        NSString *arg_extensions = GetNullableObjectAtIndex(args, 8);
+        [api searchPoiPageNum:arg_pageNum pageSize:arg_pageSize query:arg_query ctgr:arg_ctgr city:arg_city center:arg_center radiusInMeters:arg_radiusInMeters isDistanceSort:arg_isDistanceSort extensions:arg_extensions completion:^(AmapApiResult *_Nullable output, FlutterError *_Nullable error) {
           callback(wrapResult(output, error));
         }];
       }];

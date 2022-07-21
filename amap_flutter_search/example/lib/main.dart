@@ -29,35 +29,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _message = 'Unknown';
-  final _amapFlutterSearchPlugin = AmapFlutterSearch();
+  final _search = AmapFlutterSearch();
+  List<PoiItem> poiList = [];
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    // We also handle the message potentially returning null.
-    try {
-      platformVersion = await _amapFlutterSearchPlugin.getPlatformVersion() ??
-          'Unknown platform version';
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _message = platformVersion;
-    });
   }
 
   @override
@@ -67,17 +44,26 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: InkWell(
-          onTap: () async {
-            final result = await _amapFlutterSearchPlugin.queryPoi();
+        body: RefreshIndicator(
+          onRefresh: () async {
+            final result = await _search.searchPoi(PoiSearchQuery(
+              extensionType: PoiSearchExtensionType.base,
+              bound: PoiSearchBound(
+                center: const LatLng(22.613214474316194, 114.04325930881298),
+              ),
+            ));
             if (mounted) {
               setState(() {
-                _message = result.toString();
+                poiList = result.poiList;
               });
             }
           },
-          child: Center(
-            child: Text('message: $_message\n'),
+          child: ListView.builder(
+            itemBuilder: (context, index) => ListTile(
+              title: Text(poiList[index].title),
+              subtitle: Text(poiList[index].toString()),
+            ),
+            itemCount: poiList.length,
           ),
         ),
       ),

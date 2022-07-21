@@ -8,14 +8,16 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class AmapQueryPoiResult;
+@class AmapApiResult;
 
-@interface AmapQueryPoiResult : NSObject
+@interface AmapApiResult : NSObject
 /// `init` unavailable to enforce nonnull fields, see the `make` class method.
 - (instancetype)init NS_UNAVAILABLE;
-+ (instancetype)makeWithResult:(nullable NSDictionary<NSString *, id> *)result
++ (instancetype)makeWithData:(nullable NSDictionary<NSString *, id> *)data
+    message:(nullable NSString *)message
     code:(NSNumber *)code;
-@property(nonatomic, strong, nullable) NSDictionary<NSString *, id> * result;
+@property(nonatomic, strong, nullable) NSDictionary<NSString *, id> * data;
+@property(nonatomic, copy, nullable) NSString * message;
 @property(nonatomic, strong) NSNumber * code;
 @end
 
@@ -28,7 +30,7 @@ NSObject<FlutterMessageCodec> *AmapSearchHostApiGetCodec(void);
 - (void)setApiKeyApiKey:(NSString *)apiKey error:(FlutterError *_Nullable *_Nonnull)error;
 - (void)updatePrivacyShowIsContains:(NSNumber *)isContains isShow:(NSNumber *)isShow error:(FlutterError *_Nullable *_Nonnull)error;
 - (void)updatePrivacyAgreeIsAgree:(NSNumber *)isAgree error:(FlutterError *_Nullable *_Nonnull)error;
-- (void)queryPoiWithCompletion:(void(^)(AmapQueryPoiResult *_Nullable, FlutterError *_Nullable))completion;
+- (void)searchPoiPageNum:(NSNumber *)pageNum pageSize:(NSNumber *)pageSize query:(NSString *)query ctgr:(NSString *)ctgr city:(NSString *)city center:(nullable id)center radiusInMeters:(nullable NSNumber *)radiusInMeters isDistanceSort:(nullable NSNumber *)isDistanceSort extensions:(NSString *)extensions completion:(void(^)(AmapApiResult *_Nullable, FlutterError *_Nullable))completion;
 @end
 
 extern void AmapSearchHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<AmapSearchHostApi> *_Nullable api);

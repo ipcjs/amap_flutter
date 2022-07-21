@@ -7,26 +7,30 @@ import 'dart:typed_data' show Uint8List, Int32List, Int64List, Float64List;
 import 'package:flutter/foundation.dart' show WriteBuffer, ReadBuffer;
 import 'package:flutter/services.dart';
 
-class QueryPoiResult {
-  QueryPoiResult({
-    this.result,
+class ApiResult {
+  ApiResult({
+    this.data,
+    this.message,
     required this.code,
   });
 
-  Map<String?, Object?>? result;
+  Map<String?, Object?>? data;
+  String? message;
   int code;
 
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['result'] = result;
+    pigeonMap['data'] = data;
+    pigeonMap['message'] = message;
     pigeonMap['code'] = code;
     return pigeonMap;
   }
 
-  static QueryPoiResult decode(Object message) {
+  static ApiResult decode(Object message) {
     final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
-    return QueryPoiResult(
-      result: (pigeonMap['result'] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+    return ApiResult(
+      data: (pigeonMap['data'] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+      message: pigeonMap['message'] as String?,
       code: pigeonMap['code']! as int,
     );
   }
@@ -36,7 +40,7 @@ class _SearchHostApiCodec extends StandardMessageCodec {
   const _SearchHostApiCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
-    if (value is QueryPoiResult) {
+    if (value is ApiResult) {
       buffer.putUint8(128);
       writeValue(buffer, value.encode());
     } else 
@@ -48,7 +52,7 @@ class _SearchHostApiCodec extends StandardMessageCodec {
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
       case 128:       
-        return QueryPoiResult.decode(readValue(buffer)!);
+        return ApiResult.decode(readValue(buffer)!);
       
       default:      
         return super.readValueOfType(type, buffer);
@@ -160,11 +164,11 @@ class SearchHostApi {
     }
   }
 
-  Future<QueryPoiResult> queryPoi() async {
+  Future<ApiResult> searchPoi(int arg_pageNum, int arg_pageSize, String arg_query, String arg_ctgr, String arg_city, Object? arg_center, int? arg_radiusInMeters, bool? arg_isDistanceSort, String arg_extensions) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.SearchHostApi.queryPoi', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.SearchHostApi.searchPoi', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
+        await channel.send(<Object?>[arg_pageNum, arg_pageSize, arg_query, arg_ctgr, arg_city, arg_center, arg_radiusInMeters, arg_isDistanceSort, arg_extensions]) as Map<Object?, Object?>?;
     if (replyMap == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -183,7 +187,7 @@ class SearchHostApi {
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as QueryPoiResult?)!;
+      return (replyMap['result'] as ApiResult?)!;
     }
   }
 }

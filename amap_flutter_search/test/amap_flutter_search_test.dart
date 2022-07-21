@@ -1,4 +1,4 @@
-import 'package:amap_flutter_base/amap_flutter_base.dart';
+import 'package:amap_flutter_search/src/beans.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:amap_flutter_search/amap_flutter_search.dart';
 import 'package:amap_flutter_search/amap_flutter_search_platform_interface.dart';
@@ -20,8 +20,7 @@ class MockAmapFlutterSearchPlatform
   }
 
   @override
-  Future<Map<String, dynamic>> queryPoi() {
-    // TODO: implement queryPoi
+  Future<PoiSearchResult> searchPoi(PoiSearchQuery query) {
     throw UnimplementedError();
   }
 }

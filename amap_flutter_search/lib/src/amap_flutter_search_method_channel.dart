@@ -1,11 +1,13 @@
 import 'dart:io';
 
 import 'package:amap_flutter_base/amap_flutter_base.dart';
-import 'package:amap_flutter_search/src/amap_search.pigeon.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
-import '../amap_flutter_search_platform_interface.dart';
+import 'package:amap_flutter_search/amap_flutter_search_platform_interface.dart';
+import 'amap_exception.dart';
+import 'amap_search.pigeon.dart';
+import 'beans.dart';
 
 /// An implementation of [AmapFlutterSearchPlatform] that uses method channels.
 class MethodChannelAmapFlutterSearch extends AmapFlutterSearchPlatform {
@@ -44,21 +46,17 @@ class MethodChannelAmapFlutterSearch extends AmapFlutterSearchPlatform {
   }
 
   @override
-  Future<Map<String, dynamic>> queryPoi() => _api.queryPoi() //
-          .then((result) {
-        if (result.code == 1000) {
-          return result.result!.cast<String, dynamic>();
-        }
-        return Future<Map<String, dynamic>>.error(AMapException(
-          code: result.code,
-          message: 'queryPoi() failed.',
-        ));
-      });
-}
-
-class AMapException implements Exception {
-  const AMapException({required this.code, this.message});
-
-  final int code;
-  final String? message;
+  Future<PoiSearchResult> searchPoi(PoiSearchQuery query) => _api
+      .searchPoi(
+        query.pageNum,
+        query.pageSize,
+        query.query,
+        query.ctgr,
+        query.city,
+        query.bound?.center.toJson(),
+        query.bound?.radiusInMeters,
+        query.bound?.isDistanceSort,
+        query.extensionType.name,
+      ) //
+      .toData(PoiSearchResult.fromJson);
 }

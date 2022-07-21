@@ -2,11 +2,14 @@
 library amap_flutter_search;
 
 export 'package:amap_flutter_base/amap_flutter_base.dart'
-    show AMapApiKey, AMapPrivacyStatement;
+    show AMapApiKey, AMapPrivacyStatement, LatLng;
+export 'src/beans.dart';
+export 'src/amap_exception.dart';
 
 import 'package:amap_flutter_base/amap_flutter_base.dart';
 
 import 'amap_flutter_search_platform_interface.dart';
+import 'src/beans.dart';
 
 class AmapFlutterSearch {
   static final _instance = AmapFlutterSearch._();
@@ -30,5 +33,6 @@ class AmapFlutterSearch {
         privacyStatement: privacyStatement,
       );
 
-  Future<Map<String, dynamic>> queryPoi() => _platform.queryPoi();
+  Future<PoiSearchResult> searchPoi(PoiSearchQuery query) =>
+      _platform.searchPoi(query);
 }

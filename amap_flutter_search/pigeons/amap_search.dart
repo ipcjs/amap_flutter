@@ -13,7 +13,16 @@ import 'package:pigeon/pigeon.dart';
   ),
 ))
 
+/// ## 搜索接口
 ///
+/// ## 为什么不用pigeon生成的Model类
+/// pigeon生成的Model类存在如下问题:
+/// 1. 无法给Model属性设置默认值
+/// 2. 不在当前模板中的类, 不能使用
+///
+/// 故针对复杂的方法调用, 参数"打平"成超长的参数列表, 返回值使用Map<String?, Object?>来接收数据
+///
+/// 如: [SearchHostApi.searchPoi]
 @HostApi()
 abstract class SearchHostApi {
   String getPlatformVersion();
@@ -24,12 +33,24 @@ abstract class SearchHostApi {
 
   void updatePrivacyAgree(bool isAgree);
 
+  /// - [center], [LatLng]是外部的类, 不能在当前模板中使用, 故这里声明成[LatLng.toJson]的返回值类型: [Object]
   @async
-  QueryPoiResult queryPoi();
+  ApiResult searchPoi(
+    int pageNum,
+    int pageSize,
+    String query,
+    String ctgr,
+    String city,
+    Object? center,
+    int? radiusInMeters,
+    bool? isDistanceSort,
+    String extensions,
+  );
 }
 
-class QueryPoiResult {
-  QueryPoiResult(this.result, this.code);
-  Map<String?, Object?>? result;
+class ApiResult {
+  ApiResult(this.data, this.code, this.message);
+  Map<String?, Object?>? data;
+  String? message;
   int code;
 }

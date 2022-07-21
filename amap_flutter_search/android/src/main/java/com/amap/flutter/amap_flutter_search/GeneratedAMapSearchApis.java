@@ -23,11 +23,17 @@ import java.util.HashMap;
 public class GeneratedAMapSearchApis {
 
   /** Generated class from Pigeon that represents data sent in messages. */
-  public static class QueryPoiResult {
-    private @Nullable Map<String, Object> result;
-    public @Nullable Map<String, Object> getResult() { return result; }
-    public void setResult(@Nullable Map<String, Object> setterArg) {
-      this.result = setterArg;
+  public static class ApiResult {
+    private @Nullable Map<String, Object> data;
+    public @Nullable Map<String, Object> getData() { return data; }
+    public void setData(@Nullable Map<String, Object> setterArg) {
+      this.data = setterArg;
+    }
+
+    private @Nullable String message;
+    public @Nullable String getMessage() { return message; }
+    public void setMessage(@Nullable String setterArg) {
+      this.message = setterArg;
     }
 
     private @NonNull Long code;
@@ -40,11 +46,16 @@ public class GeneratedAMapSearchApis {
     }
 
     /** Constructor is private to enforce null safety; use Builder. */
-    private QueryPoiResult() {}
+    private ApiResult() {}
     public static final class Builder {
-      private @Nullable Map<String, Object> result;
-      public @NonNull Builder setResult(@Nullable Map<String, Object> setterArg) {
-        this.result = setterArg;
+      private @Nullable Map<String, Object> data;
+      public @NonNull Builder setData(@Nullable Map<String, Object> setterArg) {
+        this.data = setterArg;
+        return this;
+      }
+      private @Nullable String message;
+      public @NonNull Builder setMessage(@Nullable String setterArg) {
+        this.message = setterArg;
         return this;
       }
       private @Nullable Long code;
@@ -52,23 +63,27 @@ public class GeneratedAMapSearchApis {
         this.code = setterArg;
         return this;
       }
-      public @NonNull QueryPoiResult build() {
-        QueryPoiResult pigeonReturn = new QueryPoiResult();
-        pigeonReturn.setResult(result);
+      public @NonNull ApiResult build() {
+        ApiResult pigeonReturn = new ApiResult();
+        pigeonReturn.setData(data);
+        pigeonReturn.setMessage(message);
         pigeonReturn.setCode(code);
         return pigeonReturn;
       }
     }
     @NonNull Map<String, Object> toMap() {
       Map<String, Object> toMapResult = new HashMap<>();
-      toMapResult.put("result", result);
+      toMapResult.put("data", data);
+      toMapResult.put("message", message);
       toMapResult.put("code", code);
       return toMapResult;
     }
-    static @NonNull QueryPoiResult fromMap(@NonNull Map<String, Object> map) {
-      QueryPoiResult pigeonResult = new QueryPoiResult();
-      Object result = map.get("result");
-      pigeonResult.setResult((Map<String, Object>)result);
+    static @NonNull ApiResult fromMap(@NonNull Map<String, Object> map) {
+      ApiResult pigeonResult = new ApiResult();
+      Object data = map.get("data");
+      pigeonResult.setData((Map<String, Object>)data);
+      Object message = map.get("message");
+      pigeonResult.setMessage((String)message);
       Object code = map.get("code");
       pigeonResult.setCode((code == null) ? null : ((code instanceof Integer) ? (Integer)code : (Long)code));
       return pigeonResult;
@@ -86,7 +101,7 @@ public class GeneratedAMapSearchApis {
     protected Object readValueOfType(byte type, ByteBuffer buffer) {
       switch (type) {
         case (byte)128:         
-          return QueryPoiResult.fromMap((Map<String, Object>) readValue(buffer));
+          return ApiResult.fromMap((Map<String, Object>) readValue(buffer));
         
         default:        
           return super.readValueOfType(type, buffer);
@@ -95,9 +110,9 @@ public class GeneratedAMapSearchApis {
     }
     @Override
     protected void writeValue(ByteArrayOutputStream stream, Object value)     {
-      if (value instanceof QueryPoiResult) {
+      if (value instanceof ApiResult) {
         stream.write(128);
-        writeValue(stream, ((QueryPoiResult) value).toMap());
+        writeValue(stream, ((ApiResult) value).toMap());
       } else 
 {
         super.writeValue(stream, value);
@@ -111,7 +126,7 @@ public class GeneratedAMapSearchApis {
     void setApiKey(@NonNull String apiKey);
     void updatePrivacyShow(@NonNull Boolean isContains, @NonNull Boolean isShow);
     void updatePrivacyAgree(@NonNull Boolean isAgree);
-    void queryPoi(Result<QueryPoiResult> result);
+    void searchPoi(@NonNull Long pageNum, @NonNull Long pageSize, @NonNull String query, @NonNull String ctgr, @NonNull String city, @Nullable Object center, @Nullable Long radiusInMeters, @Nullable Boolean isDistanceSort, @NonNull String extensions, Result<ApiResult> result);
 
     /** The codec used by SearchHostApi. */
     static MessageCodec<Object> getCodec() {
@@ -217,13 +232,41 @@ public class GeneratedAMapSearchApis {
       }
       {
         BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.SearchHostApi.queryPoi", getCodec());
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.SearchHostApi.searchPoi", getCodec());
         if (api != null) {
           channel.setMessageHandler((message, reply) -> {
             Map<String, Object> wrapped = new HashMap<>();
             try {
-              Result<QueryPoiResult> resultCallback = new Result<QueryPoiResult>() {
-                public void success(QueryPoiResult result) {
+              ArrayList<Object> args = (ArrayList<Object>)message;
+              Number pageNumArg = (Number)args.get(0);
+              if (pageNumArg == null) {
+                throw new NullPointerException("pageNumArg unexpectedly null.");
+              }
+              Number pageSizeArg = (Number)args.get(1);
+              if (pageSizeArg == null) {
+                throw new NullPointerException("pageSizeArg unexpectedly null.");
+              }
+              String queryArg = (String)args.get(2);
+              if (queryArg == null) {
+                throw new NullPointerException("queryArg unexpectedly null.");
+              }
+              String ctgrArg = (String)args.get(3);
+              if (ctgrArg == null) {
+                throw new NullPointerException("ctgrArg unexpectedly null.");
+              }
+              String cityArg = (String)args.get(4);
+              if (cityArg == null) {
+                throw new NullPointerException("cityArg unexpectedly null.");
+              }
+              Object centerArg = (Object)args.get(5);
+              Number radiusInMetersArg = (Number)args.get(6);
+              Boolean isDistanceSortArg = (Boolean)args.get(7);
+              String extensionsArg = (String)args.get(8);
+              if (extensionsArg == null) {
+                throw new NullPointerException("extensionsArg unexpectedly null.");
+              }
+              Result<ApiResult> resultCallback = new Result<ApiResult>() {
+                public void success(ApiResult result) {
                   wrapped.put("result", result);
                   reply.reply(wrapped);
                 }
@@ -233,7 +276,7 @@ public class GeneratedAMapSearchApis {
                 }
               };
 
-              api.queryPoi(resultCallback);
+              api.searchPoi((pageNumArg == null) ? null : pageNumArg.longValue(), (pageSizeArg == null) ? null : pageSizeArg.longValue(), queryArg, ctgrArg, cityArg, centerArg, (radiusInMetersArg == null) ? null : radiusInMetersArg.longValue(), isDistanceSortArg, extensionsArg, resultCallback);
             }
             catch (Error | RuntimeException exception) {
               wrapped.put("error", wrapError(exception));
