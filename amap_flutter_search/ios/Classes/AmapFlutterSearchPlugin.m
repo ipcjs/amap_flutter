@@ -29,5 +29,8 @@
     // TODO: impl
 }
 
+- (void)searchPoiPageNum:(nonnull NSNumber *)pageNum pageSize:(nonnull NSNumber *)pageSize query:(nonnull NSString *)query ctgr:(nonnull NSString *)ctgr city:(nonnull NSString *)city center:(nullable id)center radiusInMeters:(nullable NSNumber *)radiusInMeters isDistanceSort:(nullable NSNumber *)isDistanceSort extensions:(nonnull NSString *)extensions completion:(nonnull void (^)(AmapApiResult * _Nullable, FlutterError * _Nullable))completion {
+    completion([AmapApiResult makeWithData:nil message:nil code:@1001], nil);
+}
 
 @end
