@@ -34,6 +34,9 @@ class PoiItem {
   final LatLng position;
 
   final String cityName;
+
+  /// @see [cityCodeFixed]
+  @Deprecated('使用cityCodeFixed替代')
   final String cityCode;
   final String adCode;
   final String adName;
@@ -43,6 +46,16 @@ class PoiItem {
   final String tel;
   final String website;
   final PoiItemExtension poiExtension;
+
+  /// 实测在Android平台上[cityCode]返回的是城市电话区号...
+  /// 这里通过取[adCode]的前4位, 尝试返回正确的城市代码
+  String get cityCodeFixed {
+    if (adCode.length != 6) {
+      return cityCode;
+    }
+    // 取adCode的前4位当作城市代码
+    return '${adCode.substring(0, 4)}00';
+  }
 
   factory PoiItem.fromJson(Map<dynamic, dynamic> json) =>
       _$PoiItemFromJson(json);
