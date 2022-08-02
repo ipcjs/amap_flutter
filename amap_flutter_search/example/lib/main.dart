@@ -39,15 +39,25 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _refresh() async {
-    final result = await _search.searchPoi(PoiSearchQuery(
-      extensionType: PoiSearchExtensionType.all,
+    const center = LatLng(22.613214474316194, 114.04325930881298);
+    var futureBase = _search.searchPoi(PoiSearchQuery(
+      extensionType: PoiSearchExtensionType.base,
       bound: PoiSearchBound(
-        center: const LatLng(22.613214474316194, 114.04325930881298),
+        center: center,
       ),
     ));
+    var futureAll = _search.searchPoi(PoiSearchQuery(
+      extensionType: PoiSearchExtensionType.all,
+      bound: PoiSearchBound(
+        center: center,
+      ),
+    ));
+    // 模拟同时执行多个请求, Native层需要能够区分各自的响应
+    final results = await Future.wait([futureBase, futureAll]);
+
     if (mounted) {
       setState(() {
-        poiList = result.poiList;
+        poiList = results[1].poiList;
       });
     }
   }
