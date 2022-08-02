@@ -40,7 +40,7 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> _refresh() async {
     final result = await _search.searchPoi(PoiSearchQuery(
-      extensionType: PoiSearchExtensionType.base,
+      extensionType: PoiSearchExtensionType.all,
       bound: PoiSearchBound(
         center: const LatLng(22.613214474316194, 114.04325930881298),
       ),
