@@ -35,8 +35,8 @@ class PoiItem {
 
   final String cityName;
 
-  /// @see [cityCodeFixed]
-  @Deprecated('使用cityCodeFixed替代')
+  /// 高德地图的cityCode, 是类似手机区号的格式...要获取和[adCode], [provinceCode]类似
+  /// 格式的城市代码, 请使用[cityCodeFixed]替代
   final String cityCode;
   final String adCode;
   final String adName;
@@ -48,7 +48,7 @@ class PoiItem {
   final PoiItemExtension poiExtension;
 
   /// 实测在Android平台上[cityCode]返回的是城市电话区号...
-  /// 这里通过取[adCode]的前4位, 尝试返回正确的城市代码
+  /// 这里通过取[adCode]的前4位, 尝试返回和[adCode], [provinceCode]类似格式的的城市代码
   String get cityCodeFixed {
     if (adCode.length != 6) {
       return cityCode;
