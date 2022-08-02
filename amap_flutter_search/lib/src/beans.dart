@@ -90,14 +90,19 @@ class PoiSearchQuery {
     this.pageSize = 20,
     this.query = '',
     this.city = '',
-    this.ctgr = '',
+    this.types = '',
     this.bound,
     this.extensionType = PoiSearchExtensionType.base,
   });
   final int pageNum;
   final int pageSize;
   final String query;
-  final String ctgr;
+
+  /// Poi类型, 多个类型用`|`分隔
+  ///
+  /// - Android上对应`ctgr`参数
+  /// - iOS上对应`types`参数
+  final String types;
   final String city;
   final PoiSearchBound? bound;
   final PoiSearchExtensionType extensionType;

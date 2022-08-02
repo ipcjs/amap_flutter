@@ -39,7 +39,7 @@ abstract class SearchHostApi {
     int pageNum,
     int pageSize,
     String query,
-    String ctgr,
+    String types,
     String city,
     Object? center,
     int? radiusInMeters,

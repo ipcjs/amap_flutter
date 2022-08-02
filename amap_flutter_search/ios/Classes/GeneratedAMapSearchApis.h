@@ -30,7 +30,7 @@ NSObject<FlutterMessageCodec> *AmapSearchHostApiGetCodec(void);
 - (void)setApiKeyApiKey:(NSString *)apiKey error:(FlutterError *_Nullable *_Nonnull)error;
 - (void)updatePrivacyShowIsContains:(NSNumber *)isContains isShow:(NSNumber *)isShow error:(FlutterError *_Nullable *_Nonnull)error;
 - (void)updatePrivacyAgreeIsAgree:(NSNumber *)isAgree error:(FlutterError *_Nullable *_Nonnull)error;
-- (void)searchPoiPageNum:(NSNumber *)pageNum pageSize:(NSNumber *)pageSize query:(NSString *)query ctgr:(NSString *)ctgr city:(NSString *)city center:(nullable id)center radiusInMeters:(nullable NSNumber *)radiusInMeters isDistanceSort:(nullable NSNumber *)isDistanceSort extensions:(NSString *)extensions completion:(void(^)(AmapApiResult *_Nullable, FlutterError *_Nullable))completion;
+- (void)searchPoiPageNum:(NSNumber *)pageNum pageSize:(NSNumber *)pageSize query:(NSString *)query types:(NSString *)types city:(NSString *)city center:(nullable id)center radiusInMeters:(nullable NSNumber *)radiusInMeters isDistanceSort:(nullable NSNumber *)isDistanceSort extensions:(NSString *)extensions completion:(void(^)(AmapApiResult *_Nullable, FlutterError *_Nullable))completion;
 @end
 
 extern void AmapSearchHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<AmapSearchHostApi> *_Nullable api);

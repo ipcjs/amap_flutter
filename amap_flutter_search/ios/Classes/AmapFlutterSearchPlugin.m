@@ -46,7 +46,7 @@ typedef void (^CompletionHandle)(AmapApiResult *res, FlutterError *err);
 						 privacyInfo:[isShow boolValue] ? AMapPrivacyInfoStatusDidContain : AMapPrivacyInfoStatusNotContain];
 }
 
-- (void)searchPoiPageNum:(nonnull NSNumber *)pageNum pageSize:(nonnull NSNumber *)pageSize query:(nonnull NSString *)query ctgr:(nonnull NSString *)ctgr city:(nonnull NSString *)city center:(nullable id)center radiusInMeters:(nullable NSNumber *)radiusInMeters isDistanceSort:(nullable NSNumber *)isDistanceSort extensions:(nonnull NSString *)extensions completion:(nonnull void (^)(AmapApiResult * _Nullable, FlutterError * _Nullable))completion {
+- (void)searchPoiPageNum:(nonnull NSNumber *)pageNum pageSize:(nonnull NSNumber *)pageSize query:(nonnull NSString *)query types:(nonnull NSString *)types city:(nonnull NSString *)city center:(nullable id)center radiusInMeters:(nullable NSNumber *)radiusInMeters isDistanceSort:(nullable NSNumber *)isDistanceSort extensions:(nonnull NSString *)extensions completion:(nonnull void (^)(AmapApiResult * _Nullable, FlutterError * _Nullable))completion {
 	// 如果有中心点传入，请求周边POI；没有请求关键字POI
 	if (center != nil && radiusInMeters != nil && isDistanceSort != nil) {
 		NSArray *latlngs = center;
@@ -57,7 +57,7 @@ typedef void (^CompletionHandle)(AmapApiResult *res, FlutterError *err);
 		request.page = [pageNum integerValue];
 		request.offset = [pageSize integerValue];
 		request.keywords = query;
-		request.types = ctgr;
+		request.types = types;
 		request.city = city;
 		request.location = point;
 		request.requireExtension = [extensions isEqualToString:@"base"] ? NO : YES;
@@ -71,7 +71,7 @@ typedef void (^CompletionHandle)(AmapApiResult *res, FlutterError *err);
 		request.page = [pageNum integerValue];
 		request.offset = [pageSize integerValue];
 		request.keywords = query;
-		request.types = ctgr;
+		request.types = types;
 		request.city = city;
 		request.requireExtension = [extensions isEqualToString:@"base"] ? NO : YES;
 

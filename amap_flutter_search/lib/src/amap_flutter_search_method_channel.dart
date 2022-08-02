@@ -51,7 +51,7 @@ class MethodChannelAmapFlutterSearch extends AmapFlutterSearchPlatform {
         query.pageNum,
         query.pageSize,
         query.query,
-        query.ctgr,
+        query.types,
         query.city,
         query.bound?.center.toJson(),
         query.bound?.radiusInMeters,

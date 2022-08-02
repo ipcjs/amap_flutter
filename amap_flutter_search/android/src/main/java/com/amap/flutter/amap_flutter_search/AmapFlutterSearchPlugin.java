@@ -66,7 +66,7 @@ public class AmapFlutterSearchPlugin implements FlutterPlugin, SearchHostApi {
       @NonNull Long pageNum,
       @NonNull Long pageSize,
       @NonNull String queryText,
-      @NonNull String ctgr,
+      @NonNull String types,
       @NonNull String city,
       @Nullable Object center,
       @Nullable Long radiusInMeters,
@@ -74,7 +74,7 @@ public class AmapFlutterSearchPlugin implements FlutterPlugin, SearchHostApi {
       @NonNull String extensions,
       GeneratedAMapSearchApis.Result<ApiResult> result
   ) {
-    PoiSearch.Query query = new PoiSearch.Query(queryText, ctgr, city);
+    PoiSearch.Query query = new PoiSearch.Query(queryText, types, city);
     query.setPageNum(pageNum.intValue());
     query.setPageSize(pageSize.intValue());
     query.setExtensions(extensions);
