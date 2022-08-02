@@ -2,8 +2,10 @@
 #import "GeneratedAMapSearchApis.h"
 #import "Helper.h"
 
+typedef void (^CompletionHandle)(AmapApiResult *res, FlutterError *err);
+
 @interface AmapFlutterSearchPlugin () <AmapSearchHostApi>
-@property (nonatomic, copy) void (^completionHandle)(AmapApiResult *res, FlutterError *err);
+@property (nonatomic, strong) NSMutableDictionary *requestDictionary;
 @end
 
 @implementation AmapFlutterSearchPlugin
@@ -12,23 +14,32 @@
   AmapSearchHostApiSetup(registrar.messenger, instance);
 }
 
+- (AMapSearchAPI *)search {
+	if (_search == nil) {
+		_search = [[AMapSearchAPI alloc] init];
+		_search.delegate = self;
+	}
+	return _search;
+}
+
+- (NSMutableDictionary *)requestDictionary {
+	if (_requestDictionary == nil) {
+		_requestDictionary = [[NSMutableDictionary alloc] init];
+	}
+	return _requestDictionary;
+}
+
 - (nullable NSString *)getPlatformVersionWithError:(FlutterError * _Nullable __autoreleasing * _Nonnull)error {
     return [@"iOS" stringByAppendingString:[[UIDevice currentDevice] systemVersion]];
 }
 
-
 - (void)setApiKeyApiKey:(nonnull NSString *)apiKey error:(FlutterError * _Nullable __autoreleasing * _Nonnull)error {
 	[AMapServices sharedServices].apiKey = apiKey;
-
-	self.search = [[AMapSearchAPI alloc] init];
-	self.search.delegate = self;
 }
-
 
 - (void)updatePrivacyAgreeIsAgree:(nonnull NSNumber *)isAgree error:(FlutterError * _Nullable __autoreleasing * _Nonnull)error {
 	[AMapSearchAPI updatePrivacyAgree: [isAgree boolValue] ? AMapPrivacyAgreeStatusDidAgree : AMapPrivacyAgreeStatusNotAgree];
 }
-
 
 - (void)updatePrivacyShowIsContains:(nonnull NSNumber *)isContains isShow:(nonnull NSNumber *)isShow error:(FlutterError * _Nullable __autoreleasing * _Nonnull)error {
 	[AMapSearchAPI updatePrivacyShow:[isContains boolValue] ? AMapPrivacyShowStatusDidShow : AMapPrivacyShowStatusNotShow
@@ -53,6 +64,7 @@
 		request.radius = [radiusInMeters integerValue];
 		request.sortrule = [isDistanceSort integerValue];
 
+		[self.requestDictionary addEntriesFromDictionary:[NSDictionary dictionaryWithObject:completion forKey:[NSValue valueWithNonretainedObject:request]]];
 		[self.search AMapPOIAroundSearch:request];
 	} else {
 		AMapPOIKeywordsSearchRequest *request = [[AMapPOIKeywordsSearchRequest alloc] init];
@@ -63,16 +75,14 @@
 		request.city = city;
 		request.requireExtension = [extensions isEqualToString:@"base"] ? NO : YES;
 
+		[self.requestDictionary addEntriesFromDictionary:[NSDictionary dictionaryWithObject:completion forKey:[NSValue valueWithNonretainedObject:request]]];
 		[self.search AMapPOIKeywordsSearch:request];
 	}
-
-	self.completionHandle = completion;
 }
 
 - (void)AMapSearchRequest:(id)request didFailWithError:(NSError *)error {
 	NSNumber *code = [NSNumber numberWithInteger:error.code];
-	AmapApiResult *res = [AmapApiResult makeWithData:nil message:nil code:code];
-	self.completionHandle(res, nil);
+	[self completionHandle:request result:[AmapApiResult makeWithData:nil message:nil code:code]];
 }
 
 - (void)onPOISearchDone:(AMapPOISearchBaseRequest *)request response:(AMapPOISearchResponse *)response {
@@ -88,8 +98,18 @@
 								poiArray,@"poiList",
 								nil];
 	NSNumber *code = @1000;
-	AmapApiResult *res = [AmapApiResult makeWithData:dictionary message:nil code:code];
-	self.completionHandle(res, nil);
+	[self completionHandle:request result:[AmapApiResult makeWithData:dictionary message:nil code:code]];
+}
+
+- (void)completionHandle:(AMapPOISearchBaseRequest *)request result:(AmapApiResult *)res {
+	NSValue *value = [NSValue valueWithNonretainedObject:request];
+	CompletionHandle handle = [self.requestDictionary objectForKey:value];
+	if (handle != nil) {
+		[self.requestDictionary removeObjectForKey:value];
+		handle(res, nil);
+	} else {
+		NSLog(@"没有匹配到请求相应的回调");
+	}
 }
 
 @end
