@@ -1,2 +1,5 @@
 .idea/
 .settings/
+/demos/
+.DS_Store
+.project

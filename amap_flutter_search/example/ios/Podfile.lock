@@ -1,0 +1,33 @@
+PODS:
+  - amap_flutter_search (0.0.1):
+    - AMapSearch
+    - Flutter
+  - AMapFoundation (1.7.0)
+  - AMapSearch (9.3.1):
+    - AMapFoundation (>= 1.7.0)
+  - Flutter (1.0.0)
+
+DEPENDENCIES:
+  - amap_flutter_search (from `.symlinks/plugins/amap_flutter_search/ios`)
+  - Flutter (from `Flutter`)
+
+SPEC REPOS:
+  trunk:
+    - AMapFoundation
+    - AMapSearch
+
+EXTERNAL SOURCES:
+  amap_flutter_search:
+    :path: ".symlinks/plugins/amap_flutter_search/ios"
+  Flutter:
+    :path: Flutter
+
+SPEC CHECKSUMS:
+  amap_flutter_search: 746bc6e34f21933d5d4c970c5f60b2dca0538f90
+  AMapFoundation: c14fcebd8e4267c593bd2e25067ac86b0ce64aba
+  AMapSearch: 839b25de7af9d61b65266edf64382283b6af54a1
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+
+PODFILE CHECKSUM: b1f7a399522c118a74b177b13c01eca692aa7e6d
+
+COCOAPODS: 1.11.3

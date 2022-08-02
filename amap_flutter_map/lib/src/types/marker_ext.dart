@@ -29,7 +29,7 @@ extension MarkerExt on google.Marker {
     // clickable, 控制Marker是否可点击, 若为false, 点击完全无效, 不回调onTap, 也不显示InfoWindow
     // infoWindowEnable, 控制点击时是否显示infoWindow
     //
-    // 这么我们模仿Google的行为, 但高德的iOS当前还不支持点击移动到中心点功能...
+    // 这么我们模仿Google的行为
     // addIfPresent('consumeTapEvents', consumeTapEvents);
     addIfPresent('clickable', true);
     addIfPresent('infoWindowEnable', !consumeTapEvents);
