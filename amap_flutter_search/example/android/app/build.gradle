@@ -60,6 +60,10 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    dependencies {
+        // implementation 'com.amap.api:search:9.3.1'
+    }
 }
 
 flutter {

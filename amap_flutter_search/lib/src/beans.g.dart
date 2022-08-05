@@ -64,3 +64,26 @@ Map<String, dynamic> _$PoiSearchResultToJson(PoiSearchResult instance) =>
       'poiList': instance.poiList.map((e) => e.toJson()).toList(),
       'pageCount': instance.pageCount,
     };
+
+RegeocodeResult _$RegeocodeResultFromJson(Map json) => RegeocodeResult(
+      formatAddress: json['formatAddress'] as String,
+      district: json['district'] as String,
+      adCode: json['adCode'] as String,
+      cityCode: json['cityCode'] as String,
+      city: json['city'] as String,
+      province: json['province'] as String,
+      countryCode: json['countryCode'] as String,
+      country: json['country'] as String,
+    );
+
+Map<String, dynamic> _$RegeocodeResultToJson(RegeocodeResult instance) =>
+    <String, dynamic>{
+      'formatAddress': instance.formatAddress,
+      'adCode': instance.adCode,
+      'city': instance.city,
+      'cityCode': instance.cityCode,
+      'country': instance.country,
+      'countryCode': instance.countryCode,
+      'district': instance.district,
+      'province': instance.province,
+    };

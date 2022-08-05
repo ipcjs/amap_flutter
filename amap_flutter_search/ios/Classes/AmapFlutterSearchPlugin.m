@@ -80,6 +80,11 @@ typedef void (^CompletionHandle)(AmapApiResult *res, FlutterError *err);
 	}
 }
 
+- (void)regeocodePoint:(nonnull id)point radius:(nonnull NSNumber *)radius latLngType:(nonnull NSString *)latLngType extensionType:(nonnull NSString *)extensionType poiTypes:(nonnull NSString *)poiTypes mode:(nonnull NSString *)mode completion:(nonnull void (^)(AmapApiResult * _Nullable, FlutterError * _Nullable))completion {
+    completion([AmapApiResult makeWithData:nil message:nil code:@1001], nil);
+}
+
+
 - (void)AMapSearchRequest:(id)request didFailWithError:(NSError *)error {
 	NSNumber *code = [NSNumber numberWithInteger:error.code];
 	[self completionHandle:request result:[AmapApiResult makeWithData:nil message:nil code:code]];

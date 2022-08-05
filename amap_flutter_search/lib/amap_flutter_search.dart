@@ -35,4 +35,7 @@ class AmapFlutterSearch {
 
   Future<PoiSearchResult> searchPoi(PoiSearchQuery query) =>
       _platform.searchPoi(query);
+
+  Future<RegeocodeResult?> regeocode(RegeocodeQuery query) =>
+      _platform.regeocode(query);
 }

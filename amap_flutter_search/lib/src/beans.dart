@@ -62,7 +62,7 @@ class PoiItem {
   Map<String, dynamic> toJson() => _$PoiItemToJson(this);
 
   @override
-  String toString() => "PoiItem: ${toJson()}";
+  String toString() => 'PoiItem: ${toJson()}';
 }
 
 LatLng _latLngFromJson(Object obj) => LatLng.fromJson(obj)!;
@@ -92,7 +92,7 @@ class PoiSearchQuery {
     this.city = '',
     this.types = '',
     this.bound,
-    this.extensionType = PoiSearchExtensionType.base,
+    this.extensionType = ExtensionType.base,
   });
   final int pageNum;
   final int pageSize;
@@ -105,7 +105,7 @@ class PoiSearchQuery {
   final String types;
   final String city;
   final PoiSearchBound? bound;
-  final PoiSearchExtensionType extensionType;
+  final ExtensionType extensionType;
 }
 
 class PoiSearchBound {
@@ -119,15 +119,21 @@ class PoiSearchBound {
   final bool isDistanceSort;
 }
 
-enum PoiSearchExtensionType {
+enum ExtensionType {
   /// 默认, 只查询基础信息
   base,
 
-  /// 设为该类型后, 如下字段会有尽量填充值:
+  /// 设为该类型后, [PoiItem]的如下字段会有尽量填充值:
   /// - [PoiItem.adCode]
   /// - [PoiItem.provinceCode]
   /// - [PoiItem.cityCode]
   /// - [PoiItem.poiExtension]
+  ///
+  /// [RegeocodeResult]的如下字段会尽量填充值:
+  /// - roads
+  /// - crossroads
+  /// - pois
+  /// - aois
   all,
 }
 
@@ -147,5 +153,82 @@ class PoiSearchResult {
   Map<String, dynamic> toJson() => _$PoiSearchResultToJson(this);
 
   @override
-  String toString() => "PoiSearchResult: ${toJson()}";
+  String toString() => 'PoiSearchResult: ${toJson()}';
+}
+
+/// @see https://a.amap.com/lbs/static/unzip/Android_Map_Doc/Search/com/amap/api/services/geocoder/RegeocodeQuery.html
+@immutable
+class RegeocodeQuery {
+  const RegeocodeQuery({
+    required this.point,
+    this.radius = 1000,
+    this.latLngType = LatLngType.autonavi,
+    this.extensionType = ExtensionType.base,
+    this.poiTypes = '',
+    this.mode = RegeocodeQueryMode.distance,
+  });
+  final LatLng point;
+
+  /// 查找半径
+  ///
+  /// 单位米, 范围1-3000, 默认1000
+  final double radius;
+  final LatLngType latLngType;
+  final ExtensionType extensionType;
+  final String poiTypes;
+  final RegeocodeQueryMode mode;
+}
+
+enum LatLngType {
+  /// wgs84坐标
+  gps,
+
+  /// 高德/gcj02坐标
+  autonavi,
+}
+
+/// 返回策略
+enum RegeocodeQueryMode {
+  /// 按距离返回
+  distance,
+
+  /// 按权重返回
+  score,
+}
+
+/// @see https://a.amap.com/lbs/static/unzip/Android_Map_Doc/Search/com/amap/api/services/geocoder/RegeocodeAddress.html
+@immutable
+@JsonSerializable()
+class RegeocodeResult {
+  const RegeocodeResult({
+    required this.formatAddress,
+    required this.district,
+    required this.adCode,
+    required this.cityCode,
+    required this.city,
+    required this.province,
+    required this.countryCode,
+    required this.country,
+    required this.township,
+    required this.towncode,
+  });
+
+  final String formatAddress;
+  final String adCode;
+  final String cityCode;
+  final String countryCode;
+
+  final String country;
+  final String province;
+  final String city;
+  final String district;
+  final String township;
+  final String towncode;
+
+  factory RegeocodeResult.fromJson(Map<dynamic, dynamic> json) =>
+      _$RegeocodeResultFromJson(json);
+  Map<String, dynamic> toJson() => _$RegeocodeResultToJson(this);
+
+  @override
+  String toString() => 'RegeocodeResult: ${toJson()}';
 }

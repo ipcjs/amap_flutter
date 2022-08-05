@@ -23,6 +23,11 @@ class MockAmapFlutterSearchPlatform
   Future<PoiSearchResult> searchPoi(PoiSearchQuery query) {
     throw UnimplementedError();
   }
+
+  @override
+  Future<RegeocodeResult?> regeocode(RegeocodeQuery query) {
+    throw UnimplementedError();
+  }
 }
 
 void main() {

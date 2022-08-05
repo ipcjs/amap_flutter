@@ -39,4 +39,8 @@ abstract class AmapFlutterSearchPlatform extends PlatformInterface {
   Future<PoiSearchResult> searchPoi(PoiSearchQuery query) {
     throw UnimplementedError('queryPoi() has not been implemented.');
   }
+
+  Future<RegeocodeResult?> regeocode(RegeocodeQuery query) {
+    throw UnimplementedError('regeocode() has not been implemented.');
+  }
 }

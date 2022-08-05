@@ -46,6 +46,17 @@ abstract class SearchHostApi {
     bool? isDistanceSort,
     String extensions,
   );
+
+  /// 地理位置逆编码
+  @async
+  ApiResult regeocode(
+    Object point,
+    double radius,
+    String latLngType,
+    String extensionType,
+    String poiTypes,
+    String mode,
+  );
 }
 
 class ApiResult {

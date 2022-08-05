@@ -59,4 +59,16 @@ class MethodChannelAmapFlutterSearch extends AmapFlutterSearchPlatform {
         query.extensionType.name,
       ) //
       .toData(PoiSearchResult.fromJson);
+
+  @override
+  Future<RegeocodeResult?> regeocode(RegeocodeQuery query) => _api
+      .regeocode(
+        query.point.toJson(),
+        query.radius,
+        query.latLngType.name,
+        query.extensionType.name,
+        query.poiTypes,
+        query.mode.name,
+      )
+      .toData(RegeocodeResult.fromJson);
 }

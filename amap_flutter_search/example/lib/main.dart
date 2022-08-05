@@ -41,13 +41,13 @@ class _MyAppState extends State<MyApp> {
   Future<void> _refresh() async {
     const center = LatLng(22.613214474316194, 114.04325930881298);
     var futureBase = _search.searchPoi(PoiSearchQuery(
-      extensionType: PoiSearchExtensionType.base,
+      extensionType: ExtensionType.base,
       bound: PoiSearchBound(
         center: center,
       ),
     ));
     var futureAll = _search.searchPoi(PoiSearchQuery(
-      extensionType: PoiSearchExtensionType.all,
+      extensionType: ExtensionType.all,
       bound: PoiSearchBound(
         center: center,
       ),
@@ -62,6 +62,18 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  Future<void> _handlePoiTap(BuildContext context, PoiItem poi) async {
+    final result = await _search.regeocode(RegeocodeQuery(
+      point: poi.position,
+      extensionType: ExtensionType.all,
+    ));
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(result.toString()),
+      ));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -72,10 +84,14 @@ class _MyAppState extends State<MyApp> {
         body: RefreshIndicator(
           onRefresh: _refresh,
           child: ListView.builder(
-            itemBuilder: (context, index) => ListTile(
-              title: Text(poiList[index].title),
-              subtitle: Text(poiList[index].toString()),
-            ),
+            itemBuilder: (context, index) {
+              var poi = poiList[index];
+              return ListTile(
+                onTap: () => _handlePoiTap(context, poi),
+                title: Text(poi.title),
+                subtitle: Text(poi.toString()),
+              );
+            },
             itemCount: poiList.length,
           ),
         ),
