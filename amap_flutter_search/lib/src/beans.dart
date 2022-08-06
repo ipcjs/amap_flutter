@@ -129,11 +129,11 @@ enum ExtensionType {
   /// - [PoiItem.cityCode]
   /// - [PoiItem.poiExtension]
   ///
-  /// [RegeocodeResult]的如下字段会尽量填充值:
-  /// - roads
-  /// - crossroads
-  /// - pois
-  /// - aois
+  /// [RegeocodeResult]的如下字段会尽量填充值:(因为暂时没用, 没有传到Dart层来)
+  /// - [RegeocodeResult.roads]
+  /// - [RegeocodeResult.crossroads]
+  /// - [RegeocodeResult.pois]
+  /// - [RegeocodeResult.aois]
   all,
 }
 

@@ -74,16 +74,20 @@ RegeocodeResult _$RegeocodeResultFromJson(Map json) => RegeocodeResult(
       province: json['province'] as String,
       countryCode: json['countryCode'] as String,
       country: json['country'] as String,
+      township: json['township'] as String,
+      towncode: json['towncode'] as String,
     );
 
 Map<String, dynamic> _$RegeocodeResultToJson(RegeocodeResult instance) =>
     <String, dynamic>{
       'formatAddress': instance.formatAddress,
       'adCode': instance.adCode,
-      'city': instance.city,
       'cityCode': instance.cityCode,
-      'country': instance.country,
       'countryCode': instance.countryCode,
-      'district': instance.district,
+      'country': instance.country,
       'province': instance.province,
+      'city': instance.city,
+      'district': instance.district,
+      'township': instance.township,
+      'towncode': instance.towncode,
     };

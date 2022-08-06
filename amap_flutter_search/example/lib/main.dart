@@ -29,6 +29,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  static const center = LatLng(22.613214474316194, 114.04325930881298);
   final _search = AmapFlutterSearch();
   List<PoiItem> poiList = [];
 
@@ -39,7 +40,6 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _refresh() async {
-    const center = LatLng(22.613214474316194, 114.04325930881298);
     var futureBase = _search.searchPoi(PoiSearchQuery(
       extensionType: ExtensionType.base,
       bound: PoiSearchBound(
@@ -62,9 +62,9 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  Future<void> _handlePoiTap(BuildContext context, PoiItem poi) async {
+  Future<void> _handleRegeocode(BuildContext context, LatLng position) async {
     final result = await _search.regeocode(RegeocodeQuery(
-      point: poi.position,
+      point: position,
       extensionType: ExtensionType.all,
     ));
     if (mounted) {
@@ -80,6 +80,14 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Plugin example app'),
+          actions: [
+            Builder(
+              builder: (context) => IconButton(
+                onPressed: () => _handleRegeocode(context, center),
+                icon: const Icon(Icons.add),
+              ),
+            )
+          ],
         ),
         body: RefreshIndicator(
           onRefresh: _refresh,
@@ -87,7 +95,7 @@ class _MyAppState extends State<MyApp> {
             itemBuilder: (context, index) {
               var poi = poiList[index];
               return ListTile(
-                onTap: () => _handlePoiTap(context, poi),
+                onTap: () => _handleRegeocode(context, poi.position),
                 title: Text(poi.title),
                 subtitle: Text(poi.toString()),
               );
