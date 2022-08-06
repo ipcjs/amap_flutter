@@ -78,16 +78,23 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
-          actions: [
-            Builder(
-              builder: (context) => IconButton(
-                onPressed: () => _handleRegeocode(context, center),
-                icon: const Icon(Icons.add),
-              ),
-            )
-          ],
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(kToolbarHeight),
+          child: Builder(
+              builder: (context) => AppBar(
+                    title: const Text('Plugin example app'),
+                    actions: [
+                      IconButton(
+                        onPressed: () => _handleRegeocode(context, center),
+                        icon: const Icon(Icons.work),
+                      ),
+                      IconButton(
+                        onPressed: () =>
+                            _handleRegeocode(context, const LatLng(0.1, 0.1)),
+                        icon: const Icon(Icons.work_off),
+                      ),
+                    ],
+                  )),
         ),
         body: RefreshIndicator(
           onRefresh: _refresh,
