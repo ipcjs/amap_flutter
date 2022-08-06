@@ -129,7 +129,7 @@ enum ExtensionType {
   /// - [PoiItem.cityCode]
   /// - [PoiItem.poiExtension]
   ///
-  /// [RegeocodeResult]的如下字段会尽量填充值:(因为暂时没用, 没有传到Dart层来)
+  /// [RegeocodeResult]的如下字段会尽量填充值:(大部分字段因为暂时没用, 没有传到Dart层来)
   /// - [RegeocodeResult.roads]
   /// - [RegeocodeResult.crossroads]
   /// - [RegeocodeResult.pois]
@@ -173,6 +173,8 @@ class RegeocodeQuery {
   ///
   /// 单位米, 范围1-3000, 默认1000
   final double radius;
+
+  /// iOS不支持该参数
   final LatLngType latLngType;
   final ExtensionType extensionType;
   final String poiTypes;
@@ -211,6 +213,7 @@ class RegeocodeResult {
     required this.country,
     required this.township,
     required this.towncode,
+    required this.pois,
   });
 
   final String formatAddress;
@@ -224,6 +227,8 @@ class RegeocodeResult {
   final String district;
   final String township;
   final String towncode;
+
+  final List<PoiItem> pois;
 
   factory RegeocodeResult.fromJson(Map<dynamic, dynamic> json) =>
       _$RegeocodeResultFromJson(json);

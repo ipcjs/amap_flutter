@@ -104,12 +104,12 @@ public class AmapFlutterSearchPlugin implements FlutterPlugin, SearchHostApi {
           map = new HashMap<>();
           List<Map<String, Object>> poiList = new ArrayList<>();
           int pageCount = 0;
+
           if (poiResult != null && poiResult.getPois() != null) {
-            for (PoiItem poi : poiResult.getPois()) {
-              poiList.add(JsonMaps.poiToMap(poi));
-            }
+            poiList = JsonMaps.map(poiResult.getPois(), JsonMaps::poiToMap);
             pageCount = poiResult.getPageCount();
           }
+
           map.put("pageCount", pageCount);
           map.put("poiList", poiList);
         }

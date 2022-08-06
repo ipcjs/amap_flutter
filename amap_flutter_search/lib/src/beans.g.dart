@@ -76,6 +76,9 @@ RegeocodeResult _$RegeocodeResultFromJson(Map json) => RegeocodeResult(
       country: json['country'] as String,
       township: json['township'] as String,
       towncode: json['towncode'] as String,
+      pois: (json['pois'] as List<dynamic>)
+          .map((e) => PoiItem.fromJson(e as Map))
+          .toList(),
     );
 
 Map<String, dynamic> _$RegeocodeResultToJson(RegeocodeResult instance) =>
@@ -90,4 +93,5 @@ Map<String, dynamic> _$RegeocodeResultToJson(RegeocodeResult instance) =>
       'district': instance.district,
       'township': instance.township,
       'towncode': instance.towncode,
+      'pois': instance.pois.map((e) => e.toJson()).toList(),
     };

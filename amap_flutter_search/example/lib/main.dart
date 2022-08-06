@@ -62,10 +62,14 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  Future<void> _handleRegeocode(BuildContext context, LatLng position) async {
+  Future<void> _handleRegeocode(
+    BuildContext context,
+    LatLng position, {
+    ExtensionType extensionType = ExtensionType.base,
+  }) async {
     final result = await _search.regeocode(RegeocodeQuery(
       point: position,
-      extensionType: ExtensionType.all,
+      extensionType: extensionType,
     ));
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -85,7 +89,11 @@ class _MyAppState extends State<MyApp> {
                     title: const Text('Plugin example app'),
                     actions: [
                       IconButton(
-                        onPressed: () => _handleRegeocode(context, center),
+                        onPressed: () => _handleRegeocode(
+                          context,
+                          center,
+                          extensionType: ExtensionType.all,
+                        ),
                         icon: const Icon(Icons.work),
                       ),
                       IconButton(

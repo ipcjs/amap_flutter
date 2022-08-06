@@ -13,6 +13,19 @@ import java.util.List;
 import java.util.Map;
 
 public class JsonMaps {
+  public interface Function<T, R> {
+    R apply(T t);
+  }
+
+  @NonNull
+  public static <T, R> List<R> map(@NonNull List<T> list, Function<T, R> mapper) {
+    List<R> results = new ArrayList<>(list.size());
+    for (T it : list) {
+      results.add(mapper.apply(it));
+    }
+    return results;
+  }
+
   private JsonMaps() {
   }
 
@@ -71,6 +84,7 @@ public class JsonMaps {
     map.put("province", address.getProvince());
     map.put("township", address.getTownship());
     map.put("towncode", address.getTowncode());
+    map.put("pois", map(address.getPois(), JsonMaps::poiToMap));
     return map;
   }
 }
