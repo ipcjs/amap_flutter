@@ -49,18 +49,14 @@ typedef void (^CompletionHandle)(AmapApiResult *res, FlutterError *err);
 - (void)searchPoiPageNum:(nonnull NSNumber *)pageNum pageSize:(nonnull NSNumber *)pageSize query:(nonnull NSString *)query types:(nonnull NSString *)types city:(nonnull NSString *)city center:(nullable id)center radiusInMeters:(nullable NSNumber *)radiusInMeters isDistanceSort:(nullable NSNumber *)isDistanceSort extensions:(nonnull NSString *)extensions completion:(nonnull void (^)(AmapApiResult * _Nullable, FlutterError * _Nullable))completion {
 	// 如果有中心点传入，请求周边POI；没有请求关键字POI
 	if (center != nil && radiusInMeters != nil && isDistanceSort != nil) {
-		NSArray *latlngs = center;
-		NSNumber *lat = latlngs[0];
-		NSNumber *lng = latlngs[1];
-		AMapGeoPoint *point = [AMapGeoPoint locationWithLatitude:[lat doubleValue] longitude:[lng doubleValue]];
 		AMapPOIAroundSearchRequest *request = [[AMapPOIAroundSearchRequest alloc] init];
 		request.page = [pageNum integerValue];
 		request.offset = [pageSize integerValue];
 		request.keywords = query;
 		request.types = types;
 		request.city = city;
-		request.location = point;
-		request.requireExtension = [extensions isEqualToString:@"base"] ? NO : YES;
+		request.location = [Helper pointFromObject:center];
+		request.requireExtension = [extensions isEqualToString:@"all"];
 		request.radius = [radiusInMeters integerValue];
 		request.sortrule = [isDistanceSort integerValue];
 
@@ -73,40 +69,56 @@ typedef void (^CompletionHandle)(AmapApiResult *res, FlutterError *err);
 		request.keywords = query;
 		request.types = types;
 		request.city = city;
-		request.requireExtension = [extensions isEqualToString:@"base"] ? NO : YES;
+		request.requireExtension = [extensions isEqualToString:@"all"];
 
-		[self.requestDictionary addEntriesFromDictionary:[NSDictionary dictionaryWithObject:completion forKey:[NSValue valueWithNonretainedObject:request]]];
+        [self.requestDictionary setObject:completion forKey: [NSValue valueWithNonretainedObject:request]];
 		[self.search AMapPOIKeywordsSearch:request];
 	}
 }
 
 - (void)regeocodePoint:(nonnull id)point radius:(nonnull NSNumber *)radius latLngType:(nonnull NSString *)latLngType extensionType:(nonnull NSString *)extensionType poiTypes:(nonnull NSString *)poiTypes mode:(nonnull NSString *)mode completion:(nonnull void (^)(AmapApiResult * _Nullable, FlutterError * _Nullable))completion {
-    completion([AmapApiResult makeWithData:nil message:nil code:@1001], nil);
+    AMapReGeocodeSearchRequest *request = [[AMapReGeocodeSearchRequest alloc] init];
+    request.location = [Helper pointFromObject:point];
+    request.radius = [radius integerValue];
+    // latLngType, iOS这边不支持
+    request.poitype = poiTypes;
+    request.mode = mode;
+    request.requireExtension = [extensionType isEqualToString:@"all"];
+    
+    [self.requestDictionary setObject:completion
+                               forKey:[NSValue valueWithNonretainedObject:request]];
+    [self.search AMapReGoecodeSearch: request];
+}
+
+- (void) onReGeocodeSearchDone:(AMapReGeocodeSearchRequest *)request response:(AMapReGeocodeSearchResponse *)response{
+    NSDictionary *data = response.regeocode == nil ? nil :  [Helper reGeocodeToDictionary:response.regeocode];
+    AmapApiResult *result = [AmapApiResult makeWithData:data
+                                                message:nil
+                                                   code:@(AMapSearchErrorOK)];
+    [self completionHandle:request result:result];
 }
 
 
 - (void)AMapSearchRequest:(id)request didFailWithError:(NSError *)error {
-	NSNumber *code = [NSNumber numberWithInteger:error.code];
-	[self completionHandle:request result:[AmapApiResult makeWithData:nil message:nil code:code]];
+	[self completionHandle:request result:[AmapApiResult makeWithData:nil
+                                                              message:nil
+                                                                 code:@(error.code)]];
 }
 
 - (void)onPOISearchDone:(AMapPOISearchBaseRequest *)request response:(AMapPOISearchResponse *)response {
 	NSInteger length = response.pois.count;
-	NSMutableArray *poiArray = [NSMutableArray arrayWithCapacity: length];
-	[response.pois enumerateObjectsUsingBlock:^(AMapPOI * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-		[poiArray addObject:[Helper poiToDictionary:obj]];
-	}];
 
 	NSInteger pageCount = (NSInteger)ceil((double)response.count/length);
 	NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
 								[NSNumber numberWithInteger:pageCount],@"pageCount",
-								poiArray,@"poiList",
+                                [Helper poisToArray:response.pois],@"poiList",
 								nil];
-	NSNumber *code = @1000;
-	[self completionHandle:request result:[AmapApiResult makeWithData:dictionary message:nil code:code]];
+	[self completionHandle:request result:[AmapApiResult makeWithData:dictionary
+                                                              message:nil
+                                                                 code: @(AMapSearchErrorOK)]];
 }
 
-- (void)completionHandle:(AMapPOISearchBaseRequest *)request result:(AmapApiResult *)res {
+- (void)completionHandle:(AMapSearchObject *)request result:(AmapApiResult *)res {
 	NSValue *value = [NSValue valueWithNonretainedObject:request];
 	CompletionHandle handle = [self.requestDictionary objectForKey:value];
 	if (handle != nil) {

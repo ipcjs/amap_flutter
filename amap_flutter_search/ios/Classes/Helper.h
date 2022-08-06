@@ -12,6 +12,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface Helper : NSObject
 + (NSDictionary *)poiToDictionary:(AMapPOI *)obj;
++ (AMapGeoPoint *)pointFromObject:(nonnull id)object;
++ (nonnull id)pointToObject:(AMapGeoPoint *)point;
++ (NSArray *)poisToArray:(NSArray<AMapPOI *> *)pois;
++ (NSDictionary *)reGeocodeToDictionary:(AMapReGeocode *)obj;
 @end
 
 NS_ASSUME_NONNULL_END

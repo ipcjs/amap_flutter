@@ -8,38 +8,76 @@
 #import "Helper.h"
 
 @implementation Helper
++ (AMapGeoPoint *) pointFromObject:(nonnull id)object {
+    NSArray *latlngs = object;
+    NSNumber *lat = latlngs[0];
+    NSNumber *lng = latlngs[1];
+    
+    AMapGeoPoint *point = [AMapGeoPoint locationWithLatitude:[lat doubleValue]
+                                                   longitude:[lng doubleValue]];
+    return point;
+}
+
++ (nonnull id)pointToObject:(AMapGeoPoint *)point {
+    return [NSArray arrayWithObjects:
+                [NSNumber numberWithFloat:point.latitude],
+                [NSNumber numberWithFloat:point.longitude],
+                nil];
+}
+
++ (NSDictionary *)reGeocodeToDictionary:(AMapReGeocode *)obj {
+    AMapAddressComponent *comp = obj.addressComponent;
+    return [NSDictionary dictionaryWithObjectsAndKeys:
+            obj.formattedAddress,@"formatAddress",
+            comp.district,@"district",
+            comp.adcode,@"adCode",
+            comp.citycode,@"cityCode",
+            comp.city,@"city",
+            comp.province,@"province",
+            comp.countryCode,@"countryCode",
+            comp.country,@"country",
+            comp.township,@"township",
+            comp.towncode,@"towncode",
+            [Helper poisToArray:obj.pois],@"pois",
+            nil];
+}
+
++ (NSArray *)poisToArray:(NSArray<AMapPOI *> *)pois {
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:pois.count];
+    [pois enumerateObjectsUsingBlock:^(AMapPOI * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [array addObject:[Helper poiToDictionary:obj]];
+    }];
+    return array;
+}
+
++ (NSDictionary *)poiExtensionToDictionary:(nullable AMapPOIExtension *)obj{
+    // 在nil对象上读取属性, 返回nil...
+    NSString *rating = [NSString stringWithFormat:@"%.1f",obj.rating];
+    NSString *openTime = obj.openTime == nil ? @"" : obj.openTime;
+    return [NSDictionary dictionaryWithObjectsAndKeys:
+            rating, @"rating",
+            openTime, @"openTime",
+            nil];
+}
+
 + (NSDictionary *)poiToDictionary:(AMapPOI *)obj {
-	NSString *title = [self toNonnull:obj.name];
-	NSString *cityName = [self toNonnull:obj.city];
-	NSString *cityCode = [self toNonnull:obj.citycode];
-	NSString *snippet = [self toNonnull:obj.address];
-	NSString *poiId = [self toNonnull:obj.uid];
-	NSString *adCode = [self toNonnull:obj.adcode];
-	NSString *adName = [self toNonnull:obj.district];
-	NSString *provinceCode = [self toNonnull:obj.pcode];
-	NSString *provinceName = [self toNonnull:obj.province];
-	NSString *postcode = [self toNonnull:obj.postcode];
-	NSString *tel = [self toNonnull:obj.tel];
-	NSString *website = [self toNonnull:obj.website];
-	NSString *openTime = [self toNonnull:obj.extensionInfo.openTime];
-	CGFloat lat = obj.location.latitude;
-	CGFloat lng = obj.location.longitude;
-	CGFloat rating = obj.extensionInfo.rating;
+    NSDictionary *poiExtension = [Helper poiExtensionToDictionary:obj.extensionInfo];
+    
 	return [NSDictionary dictionaryWithObjectsAndKeys:
-			title,@"title",
-			cityName,@"cityName",
-			cityCode,@"cityCode",
-			snippet,@"snippet",
-			poiId,@"poiId",
-			[NSArray arrayWithObjects:[NSNumber numberWithFloat:lat], [NSNumber numberWithFloat:lng], nil],@"position",
-			adCode,@"adCode",
-			adName,@"adName",
-			provinceCode,@"provinceCode",
-			provinceName,@"provinceName",
-			postcode,@"postcode",
-			tel,@"tel",
-			website,@"website",
-			[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%.1f",rating],@"rating",openTime,@"openTime",nil],@"poiExtension",
+			obj.name,@"title",
+			obj.city,@"cityName",
+			obj.citycode,@"cityCode",
+			obj.address,@"snippet",
+			obj.uid,@"poiId",
+			[Helper pointToObject:obj.location],@"position",
+			obj.adcode,@"adCode",
+			obj.district,@"adName",
+			obj.pcode,@"provinceCode",
+			obj.province,@"provinceName",
+			obj.postcode,@"postcode",
+			obj.tel,@"tel",
+			obj.website,@"website",
+            poiExtension,@"poiExtension",
 			nil];
 }
 
