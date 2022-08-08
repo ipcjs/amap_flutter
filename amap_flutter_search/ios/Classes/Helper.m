@@ -8,42 +8,75 @@
 #import "Helper.h"
 
 @implementation Helper
-+ (NSDictionary *)poiToDictionary:(AMapPOI *)obj {
-	NSString *title = [self toNonnull:obj.name];
-	NSString *cityName = [self toNonnull:obj.city];
-	NSString *cityCode = [self toNonnull:obj.citycode];
-	NSString *snippet = [self toNonnull:obj.address];
-	NSString *poiId = [self toNonnull:obj.uid];
-	NSString *adCode = [self toNonnull:obj.adcode];
-	NSString *adName = [self toNonnull:obj.district];
-	NSString *provinceCode = [self toNonnull:obj.pcode];
-	NSString *provinceName = [self toNonnull:obj.province];
-	NSString *postcode = [self toNonnull:obj.postcode];
-	NSString *tel = [self toNonnull:obj.tel];
-	NSString *website = [self toNonnull:obj.website];
-	NSString *openTime = [self toNonnull:obj.extensionInfo.openTime];
-	CGFloat lat = obj.location.latitude;
-	CGFloat lng = obj.location.longitude;
-	CGFloat rating = obj.extensionInfo.rating;
-	return [NSDictionary dictionaryWithObjectsAndKeys:
-			title,@"title",
-			cityName,@"cityName",
-			cityCode,@"cityCode",
-			snippet,@"snippet",
-			poiId,@"poiId",
-			[NSArray arrayWithObjects:[NSNumber numberWithFloat:lat], [NSNumber numberWithFloat:lng], nil],@"position",
-			adCode,@"adCode",
-			adName,@"adName",
-			provinceCode,@"provinceCode",
-			provinceName,@"provinceName",
-			postcode,@"postcode",
-			tel,@"tel",
-			website,@"website",
-			[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%.1f",rating],@"rating",openTime,@"openTime",nil],@"poiExtension",
-			nil];
++ (nullable AMapGeoPoint *) pointFromObject:(nullable id)object {
+    if(!object) return nil;
+        
+    NSArray *latlngs = object;
+    NSNumber *lat = latlngs[0];
+    NSNumber *lng = latlngs[1];
+    
+    AMapGeoPoint *point = [AMapGeoPoint locationWithLatitude:[lat doubleValue]
+                                                   longitude:[lng doubleValue]];
+    return point;
 }
 
-+ (NSString *)toNonnull:(nullable NSString *)string {
-	return string == nil ? @"" : string;
++ (nullable id)pointToObject:(nullable AMapGeoPoint *)point {
+    if (!point) return nil;
+
+    return @[@(point.latitude), @(point.longitude)];
 }
+
++ (NSDictionary *)reGeocodeToDictionary:(nullable AMapReGeocode *)obj {
+    AMapAddressComponent *comp = obj.addressComponent;
+    return @{
+            @"formatAddress": obj.formattedAddress ?: @"",
+            @"district": comp.district ?: @"",
+            @"adCode": comp.adcode ?: @"",
+            @"cityCode": comp.citycode ?: @"",
+            @"city": comp.city ?: @"",
+            @"province": comp.province ?: @"",
+            @"countryCode": comp.countryCode ?: @"",
+            @"country": comp.country ?: @"",
+            @"township": comp.township ?: @"",
+            @"towncode": comp.towncode ?: @"",
+            @"pois": [Helper poisToArray:obj.pois],
+    };
+}
+
++ (NSArray *)poisToArray:(nullable NSArray<AMapPOI *> *)pois {
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:pois.count];
+    [pois enumerateObjectsUsingBlock:^(AMapPOI * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [array addObject:[Helper poiToDictionary:obj]];
+    }];
+    return array;
+}
+
++ (NSDictionary *)poiExtensionToDictionary:(nullable AMapPOIExtension *)obj{
+    // 在nil对象上读取属性, 返回nil...
+    NSString *rating = [NSString stringWithFormat:@"%.1f",obj.rating];
+    return @{
+        @"rating": rating,
+        @"openTime": obj.openTime ?: @"",
+    };
+}
+
++ (NSDictionary *)poiToDictionary:(nullable AMapPOI *)obj {
+    return @{
+            @"title": obj.name ?: @"",
+			@"cityName": obj.city ?: @"",
+			@"cityCode": obj.citycode ?: @"",
+			@"snippet": obj.address ?: @"",
+			@"poiId": obj.uid ?: @"",
+			@"position": [Helper pointToObject:obj.location] ?: [NSNull null],
+			@"adCode": obj.adcode ?: @"",
+			@"adName": obj.district ?: @"",
+			@"provinceCode": obj.pcode ?: @"",
+			@"provinceName": obj.province ?: @"",
+			@"postcode": obj.postcode ?: @"",
+			@"tel": obj.tel ?: @"",
+			@"website": obj.website ?: @"",
+            @"poiExtension": [Helper poiExtensionToDictionary:obj.extensionInfo],
+    };
+}
+
 @end

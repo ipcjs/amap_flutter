@@ -127,6 +127,7 @@ public class GeneratedAMapSearchApis {
     void updatePrivacyShow(@NonNull Boolean isContains, @NonNull Boolean isShow);
     void updatePrivacyAgree(@NonNull Boolean isAgree);
     void searchPoi(@NonNull Long pageNum, @NonNull Long pageSize, @NonNull String query, @NonNull String types, @NonNull String city, @Nullable Object center, @Nullable Long radiusInMeters, @Nullable Boolean isDistanceSort, @NonNull String extensions, Result<ApiResult> result);
+    void regeocode(@NonNull Object point, @NonNull Double radius, @NonNull String latLngType, @NonNull String extensionType, @NonNull String poiTypes, @NonNull String mode, Result<ApiResult> result);
 
     /** The codec used by SearchHostApi. */
     static MessageCodec<Object> getCodec() {
@@ -277,6 +278,60 @@ public class GeneratedAMapSearchApis {
               };
 
               api.searchPoi((pageNumArg == null) ? null : pageNumArg.longValue(), (pageSizeArg == null) ? null : pageSizeArg.longValue(), queryArg, typesArg, cityArg, centerArg, (radiusInMetersArg == null) ? null : radiusInMetersArg.longValue(), isDistanceSortArg, extensionsArg, resultCallback);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+              reply.reply(wrapped);
+            }
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.SearchHostApi.regeocode", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              ArrayList<Object> args = (ArrayList<Object>)message;
+              Object pointArg = (Object)args.get(0);
+              if (pointArg == null) {
+                throw new NullPointerException("pointArg unexpectedly null.");
+              }
+              Double radiusArg = (Double)args.get(1);
+              if (radiusArg == null) {
+                throw new NullPointerException("radiusArg unexpectedly null.");
+              }
+              String latLngTypeArg = (String)args.get(2);
+              if (latLngTypeArg == null) {
+                throw new NullPointerException("latLngTypeArg unexpectedly null.");
+              }
+              String extensionTypeArg = (String)args.get(3);
+              if (extensionTypeArg == null) {
+                throw new NullPointerException("extensionTypeArg unexpectedly null.");
+              }
+              String poiTypesArg = (String)args.get(4);
+              if (poiTypesArg == null) {
+                throw new NullPointerException("poiTypesArg unexpectedly null.");
+              }
+              String modeArg = (String)args.get(5);
+              if (modeArg == null) {
+                throw new NullPointerException("modeArg unexpectedly null.");
+              }
+              Result<ApiResult> resultCallback = new Result<ApiResult>() {
+                public void success(ApiResult result) {
+                  wrapped.put("result", result);
+                  reply.reply(wrapped);
+                }
+                public void error(Throwable error) {
+                  wrapped.put("error", wrapError(error));
+                  reply.reply(wrapped);
+                }
+              };
+
+              api.regeocode(pointArg, radiusArg, latLngTypeArg, extensionTypeArg, poiTypesArg, modeArg, resultCallback);
             }
             catch (Error | RuntimeException exception) {
               wrapped.put("error", wrapError(exception));

@@ -226,4 +226,29 @@ void AmapSearchHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject
       [channel setMessageHandler:nil];
     }
   }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.SearchHostApi.regeocode"
+        binaryMessenger:binaryMessenger
+        codec:AmapSearchHostApiGetCodec()        ];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(regeocodePoint:radius:latLngType:extensionType:poiTypes:mode:completion:)], @"AmapSearchHostApi api (%@) doesn't respond to @selector(regeocodePoint:radius:latLngType:extensionType:poiTypes:mode:completion:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        id arg_point = GetNullableObjectAtIndex(args, 0);
+        NSNumber *arg_radius = GetNullableObjectAtIndex(args, 1);
+        NSString *arg_latLngType = GetNullableObjectAtIndex(args, 2);
+        NSString *arg_extensionType = GetNullableObjectAtIndex(args, 3);
+        NSString *arg_poiTypes = GetNullableObjectAtIndex(args, 4);
+        NSString *arg_mode = GetNullableObjectAtIndex(args, 5);
+        [api regeocodePoint:arg_point radius:arg_radius latLngType:arg_latLngType extensionType:arg_extensionType poiTypes:arg_poiTypes mode:arg_mode completion:^(AmapApiResult *_Nullable output, FlutterError *_Nullable error) {
+          callback(wrapResult(output, error));
+        }];
+      }];
+    }
+    else {
+      [channel setMessageHandler:nil];
+    }
+  }
 }

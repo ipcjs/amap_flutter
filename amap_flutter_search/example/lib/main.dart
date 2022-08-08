@@ -29,6 +29,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  static const center = LatLng(22.613214474316194, 114.04325930881298);
   final _search = AmapFlutterSearch();
   List<PoiItem> poiList = [];
 
@@ -39,15 +40,14 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _refresh() async {
-    const center = LatLng(22.613214474316194, 114.04325930881298);
     var futureBase = _search.searchPoi(PoiSearchQuery(
-      extensionType: PoiSearchExtensionType.base,
+      extensionType: ExtensionType.base,
       bound: PoiSearchBound(
         center: center,
       ),
     ));
     var futureAll = _search.searchPoi(PoiSearchQuery(
-      extensionType: PoiSearchExtensionType.all,
+      extensionType: ExtensionType.all,
       bound: PoiSearchBound(
         center: center,
       ),
@@ -62,20 +62,59 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  Future<void> _handleRegeocode(
+    BuildContext context,
+    LatLng position, {
+    ExtensionType extensionType = ExtensionType.base,
+  }) async {
+    final result = await _search.regeocode(RegeocodeQuery(
+      point: position,
+      extensionType: extensionType,
+    ));
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(result.toString()),
+      ));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(kToolbarHeight),
+          child: Builder(
+              builder: (context) => AppBar(
+                    title: const Text('Plugin example app'),
+                    actions: [
+                      IconButton(
+                        onPressed: () => _handleRegeocode(
+                          context,
+                          center,
+                          extensionType: ExtensionType.all,
+                        ),
+                        icon: const Icon(Icons.work),
+                      ),
+                      IconButton(
+                        onPressed: () =>
+                            _handleRegeocode(context, const LatLng(0.1, 0.1)),
+                        icon: const Icon(Icons.work_off),
+                      ),
+                    ],
+                  )),
         ),
         body: RefreshIndicator(
           onRefresh: _refresh,
           child: ListView.builder(
-            itemBuilder: (context, index) => ListTile(
-              title: Text(poiList[index].title),
-              subtitle: Text(poiList[index].toString()),
-            ),
+            itemBuilder: (context, index) {
+              var poi = poiList[index];
+              return ListTile(
+                onTap: () => _handleRegeocode(context, poi.position),
+                title: Text(poi.title),
+                subtitle: Text(poi.toString()),
+              );
+            },
             itemCount: poiList.length,
           ),
         ),

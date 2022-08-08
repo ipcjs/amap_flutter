@@ -23,6 +23,13 @@ extension AMapApiResultExt on Future<AMapApiResult> {
   Future<T> toData<T>(T Function(Map<dynamic, dynamic> json) fromJson) =>
       then<T>((result) {
         if (result.code == AMapException.CODE_SUCCESS) {
+          if (result.data == null) {
+            if (null is T) {
+              return null as T;
+            } else {
+              throw ArgumentError('result.data可能为null, 请将T($T)声明成可空');
+            }
+          }
           return fromJson(result.data!);
         }
         return Future<T>.error(AMapException(

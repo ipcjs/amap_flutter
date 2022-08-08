@@ -8,10 +8,15 @@
 #import <Foundation/Foundation.h>
 #import <AMapSearchKit/AMapSearchKit.h>
 
+// 假设默认非空
 NS_ASSUME_NONNULL_BEGIN
 
 @interface Helper : NSObject
-+ (NSDictionary *)poiToDictionary:(AMapPOI *)obj;
++ (nullable AMapGeoPoint *)pointFromObject:(nullable id)object;
++ (nullable id)pointToObject:(nullable AMapGeoPoint *)point;
++ (NSArray *)poisToArray:(nullable NSArray<AMapPOI *> *)pois;
++ (NSDictionary *)reGeocodeToDictionary:(nullable AMapReGeocode *)obj;
++ (NSDictionary *)poiToDictionary:(nullable AMapPOI *)obj;
 @end
 
 NS_ASSUME_NONNULL_END
