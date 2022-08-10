@@ -8,6 +8,14 @@
 #import "Helper.h"
 
 @implementation Helper
++ (NSArray *)map:(nullable NSArray *)array withBlock:(id(^)(id obj))transform {
+    NSMutableArray *results = [NSMutableArray arrayWithCapacity:array.count];
+    [array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [results addObject:transform(obj)];
+    }];
+    return results;
+}
+
 + (nullable AMapGeoPoint *) pointFromObject:(nullable id)object {
     if(!object) return nil;
         
@@ -39,16 +47,23 @@
             @"country": comp.country ?: @"",
             @"township": comp.township ?: @"",
             @"towncode": comp.towncode ?: @"",
-            @"pois": [Helper poisToArray:obj.pois],
+            @"pois": [Helper map:obj.pois withBlock:^id(AMapPOI *obj) {
+                return [Helper poiToDictionary:obj];
+            }],
+            @"aois": [Helper map:obj.aois withBlock:^id(AMapAOI *obj) {
+                return [Helper aoiToDictionary:obj];
+            }],
     };
 }
 
-+ (NSArray *)poisToArray:(nullable NSArray<AMapPOI *> *)pois {
-    NSMutableArray *array = [NSMutableArray arrayWithCapacity:pois.count];
-    [pois enumerateObjectsUsingBlock:^(AMapPOI * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            [array addObject:[Helper poiToDictionary:obj]];
-    }];
-    return array;
++ (NSDictionary *)poiSearchResponseToDictionary:(AMapPOISearchResponse *)response {
+    NSUInteger length = response.pois.count;
+    return @{
+        @"pageCount": @((NSInteger)ceil((double)response.count / length)),
+        @"poiList": [Helper map:response.pois withBlock:^id(AMapPOI *obj) {
+            return [Helper poiToDictionary:obj];
+        }],
+    };
 }
 
 + (NSDictionary *)poiExtensionToDictionary:(nullable AMapPOIExtension *)obj{
@@ -76,6 +91,16 @@
 			@"tel": obj.tel ?: @"",
 			@"website": obj.website ?: @"",
             @"poiExtension": [Helper poiExtensionToDictionary:obj.extensionInfo],
+    };
+}
+
++ (NSDictionary *)aoiToDictionary:(nullable AMapAOI *)obj {
+    return @{
+        @"name": obj.name ?: @"",
+        @"id": obj.uid ?: @"",
+        @"adCode": obj.adcode ?: @"",
+        @"area": @(obj.area ?: 0.0),
+        @"center": [Helper pointToObject:obj.location] ?: [NSNull null],
     };
 }
 

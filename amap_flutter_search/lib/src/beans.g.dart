@@ -79,6 +79,9 @@ RegeocodeResult _$RegeocodeResultFromJson(Map json) => RegeocodeResult(
       pois: (json['pois'] as List<dynamic>)
           .map((e) => PoiItem.fromJson(e as Map))
           .toList(),
+      aois: (json['aois'] as List<dynamic>)
+          .map((e) => AoiItem.fromJson(Map<String, dynamic>.from(e as Map)))
+          .toList(),
     );
 
 Map<String, dynamic> _$RegeocodeResultToJson(RegeocodeResult instance) =>
@@ -94,4 +97,21 @@ Map<String, dynamic> _$RegeocodeResultToJson(RegeocodeResult instance) =>
       'township': instance.township,
       'towncode': instance.towncode,
       'pois': instance.pois.map((e) => e.toJson()).toList(),
+      'aois': instance.aois.map((e) => e.toJson()).toList(),
+    };
+
+AoiItem _$AoiItemFromJson(Map json) => AoiItem(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      adCode: json['adCode'] as String,
+      center: _latLngFromJson(json['center'] as Object),
+      area: (json['area'] as num).toDouble(),
+    );
+
+Map<String, dynamic> _$AoiItemToJson(AoiItem instance) => <String, dynamic>{
+      'center': instance.center.toJson(),
+      'adCode': instance.adCode,
+      'id': instance.id,
+      'name': instance.name,
+      'area': instance.area,
     };

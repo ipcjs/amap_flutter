@@ -146,7 +146,6 @@ public class AmapFlutterSearchPlugin implements FlutterPlugin, SearchHostApi {
         if (errorCode == AMapException.CODE_AMAP_SUCCESS) {
           if (regeocodeResult != null
               && regeocodeResult.getRegeocodeAddress() != null
-              // TODO: 2022/8/6 未查询到结果时, formatAddress返回空字符串, 是否要特殊处理成返回null?
               && regeocodeResult.getRegeocodeAddress().getFormatAddress() != null) {
             map = JsonMaps.regeocodeAddressToMap(regeocodeResult.getRegeocodeAddress());
           }

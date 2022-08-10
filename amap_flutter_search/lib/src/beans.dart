@@ -214,6 +214,7 @@ class RegeocodeResult {
     required this.township,
     required this.towncode,
     required this.pois,
+    required this.aois,
   });
 
   final String formatAddress;
@@ -229,6 +230,7 @@ class RegeocodeResult {
   final String towncode;
 
   final List<PoiItem> pois;
+  final List<AoiItem> aois;
 
   factory RegeocodeResult.fromJson(Map<dynamic, dynamic> json) =>
       _$RegeocodeResultFromJson(json);
@@ -236,4 +238,31 @@ class RegeocodeResult {
 
   @override
   String toString() => 'RegeocodeResult: ${toJson()}';
+}
+
+/// @see https://a.amap.com/lbs/static/unzip/Android_Map_Doc/Search/com/amap/api/services/geocoder/AoiItem.html
+@immutable
+@JsonSerializable()
+class AoiItem {
+  const AoiItem({
+    required this.id,
+    required this.name,
+    required this.adCode,
+    required this.center,
+    required this.area,
+  });
+  @JsonKey(fromJson: _latLngFromJson)
+  final LatLng center;
+  final String adCode;
+  final String id;
+  final String name;
+  final double area;
+
+  factory AoiItem.fromJson(Map<String, dynamic> json) =>
+      _$AoiItemFromJson(json);
+  @override
+  Map<String, dynamic> toJson() => _$AoiItemToJson(this);
+
+  @override
+  String toString() => 'AoiItem: ${toJson()}';
 }
