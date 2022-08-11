@@ -15,7 +15,7 @@ dependencies:
   plugin_platform_interface: ^2.0.0
   stream_transform: ^2.0.0
   # 锁死google的版本号
-  google_maps_flutter_platform_interface: 2.1.5
+  google_maps_flutter_platform_interface: 2.2.1
   amap_flutter_base: ^3.0.0
 #  amap_flutter_base:
 #    path: ../amap_flutter_base
