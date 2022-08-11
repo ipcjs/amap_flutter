@@ -14,6 +14,7 @@ export 'camera_ext.dart';
 export 'marker_ext.dart';
 export 'polyline_ext.dart';
 export 'polygon_ext.dart';
+export 'circle_ext.dart';
 export 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart'
     show
         // MapType,

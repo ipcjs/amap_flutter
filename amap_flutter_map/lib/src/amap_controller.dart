@@ -108,6 +108,10 @@ class AMapController {
     return _methodChannel.updatePolygons(polygonUpdates, mapId: mapId);
   }
 
+  Future<void> _updateCircles(CircleUpdates circleUpdates) {
+    return _methodChannel.updateCircles(circleUpdates, mapId: mapId);
+  }
+
   ///改变地图视角
   ///
   ///通过[CameraUpdate]对象设置新的中心点、缩放比例、放大缩小、显示区域等内容

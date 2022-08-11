@@ -65,6 +65,9 @@ class AMapWidget extends StatefulWidget {
   /// 地图上显示的polygon
   final Set<Polygon> polygons;
 
+  /// 地图上显示circle
+  final Set<Circle> circles;
+
   /// 地图创建成功的回调, 收到此回调之后才可以操作地图
   final MapCreatedCallback? onMapCreated;
 
@@ -138,6 +141,7 @@ class AMapWidget extends StatefulWidget {
     this.markers = const <Marker>{},
     this.polylines = const <Polyline>{},
     this.polygons = const <Polygon>{},
+    this.circles = const <Circle>{},
   }) : super(key: key);
 
   ///
@@ -149,6 +153,7 @@ class _MapState extends State<AMapWidget> {
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
   Map<PolylineId, Polyline> _polylines = <PolylineId, Polyline>{};
   Map<PolygonId, Polygon> _polygons = <PolygonId, Polygon>{};
+  Map<CircleId, Circle> _circles = <CircleId, Circle>{};
 
   final Completer<AMapController> _controller = Completer<AMapController>();
   late _AMapOptions _mapOptions;
@@ -164,6 +169,7 @@ class _MapState extends State<AMapWidget> {
       'markersToAdd': serializeMarkerSet(widget.markers),
       'polylinesToAdd': serializePolylineSet(widget.polylines),
       'polygonsToAdd': serializePolygonSet(widget.polygons),
+      'circlesToAdd': serializeCircleSet(widget.circles),
     };
     Widget mapView = _methodChannel.buildView(
       creationParams,
@@ -180,6 +186,7 @@ class _MapState extends State<AMapWidget> {
     _markers = keyByMarkerId(widget.markers);
     _polygons = keyByPolygonId(widget.polygons);
     _polylines = keyByPolylineId(widget.polylines);
+    _circles = keyByCircleId(widget.circles);
     print('initState AMapWidget');
   }
 
@@ -210,6 +217,7 @@ class _MapState extends State<AMapWidget> {
     _updateMarkers();
     _updatePolylines();
     _updatePolygons();
+    _updateCircles();
   }
 
   Future<void> onPlatformViewCreated(int id) async {
@@ -287,6 +295,13 @@ class _MapState extends State<AMapWidget> {
     controller._updatePolygons(
         PolygonUpdates.from(_polygons.values.toSet(), widget.polygons));
     _polygons = keyByPolygonId(widget.polygons);
+  }
+
+  void _updateCircles() async {
+    final AMapController controller = await _controller.future;
+    controller._updateCircles(
+        CircleUpdates.from(_circles.values.toSet(), widget.circles));
+    _circles = keyByCircleId(widget.circles);
   }
 }
 
