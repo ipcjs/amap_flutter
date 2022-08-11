@@ -26,6 +26,7 @@ extension CircleExt on google.Circle {
     addIfPresent('strokeColor', strokeColor.value);
     addIfPresent('strokeWidth', strokeWidth);
     addIfPresent('visible', visible);
+    // Android支持, iOS不支持...
     addIfPresent('zIndex', zIndex);
     return json;
   }
