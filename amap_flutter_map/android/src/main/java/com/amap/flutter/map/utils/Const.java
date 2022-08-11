@@ -47,4 +47,10 @@ public class Const {
      */
     public static final String METHOD_POLYLINE_UPDATE = "polylines#update";
     public static final String[] METHOD_ID_LIST_FOR_POLYLINE = {METHOD_POLYLINE_UPDATE};
+
+    /**
+     * circles
+     */
+    public static final String METHOD_CIRCLE_UPDATE = "circles#update";
+    public static final String[] METHOD_ID_LIST_FOR_CIRCLE = {METHOD_CIRCLE_UPDATE};
 }

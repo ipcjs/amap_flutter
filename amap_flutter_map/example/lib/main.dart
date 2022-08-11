@@ -2,6 +2,7 @@ import 'package:amap_flutter_map_example/pages/overlays/marker_add_after_map.dar
 import 'package:amap_flutter_map_example/pages/overlays/marker_add_with_map.dart';
 import 'package:amap_flutter_map_example/pages/overlays/marker_config.dart';
 import 'package:amap_flutter_map_example/pages/overlays/marker_custom_icon.dart';
+import 'package:amap_flutter_map_example/pages/overlays/place_circle.dart';
 import 'package:amap_flutter_map_example/pages/overlays/place_polygon.dart';
 import 'package:amap_flutter_map_example/pages/overlays/place_polyline.dart';
 import 'package:amap_flutter_map_example/pages/interactive/map_gestures_options.dart';
@@ -56,6 +57,7 @@ final List<BasePage> _overlayPages = <BasePage>[
   PolylineGeodesicDemoPage('Polyline大地曲线', '演示大地曲线的添加'),
   PolylineTextureDemoPage('Polyline纹理线', '演示纹理线的添加'),
   PolygonDemoPage('Polygon操作', '演示Polygon的相关属性的操作'),
+  CircleDemoPage('Circle操作', '演示Circle的相关属性的操作'),
 ];
 
 final List<Permission> needPermissionList = [

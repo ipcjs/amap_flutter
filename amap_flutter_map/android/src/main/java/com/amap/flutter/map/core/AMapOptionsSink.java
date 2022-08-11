@@ -56,4 +56,6 @@ public interface AMapOptionsSink {
     public void setInitialPolylines(Object initialPolylines);
 
     public void setInitialPolygons(Object initialPolygons);
+
+    public void setInitialCircles(Object initialCircles);
 }

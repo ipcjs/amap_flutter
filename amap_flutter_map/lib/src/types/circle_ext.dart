@@ -5,7 +5,7 @@ import '_ext.dart';
 import 'polygon.dart';
 import 'polygon_updates.dart';
 
-/// Created by ipcjs on 2022/4/15.
+/// Created by ipcjs on 2022/8/11.
 extension CircleExt on google.Circle {
   /// [Polygon.toMap]对比[google.Polygon.toJson], 参考[google.Circle.toJson]
   Map<String, dynamic> toAMapJson() {
