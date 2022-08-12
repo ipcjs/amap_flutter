@@ -106,14 +106,7 @@ typedef void (^CompletionHandle)(AmapApiResult *res, FlutterError *err);
 }
 
 - (void)onPOISearchDone:(AMapPOISearchBaseRequest *)request response:(AMapPOISearchResponse *)response {
-	NSInteger length = response.pois.count;
-
-	NSInteger pageCount = (NSInteger)ceil((double)response.count/length);
-	NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-								[NSNumber numberWithInteger:pageCount],@"pageCount",
-                                [Helper poisToArray:response.pois],@"poiList",
-								nil];
-	[self completionHandle:request result:[AmapApiResult makeWithData:dictionary
+	[self completionHandle:request result:[AmapApiResult makeWithData:[Helper poiSearchResponseToDictionary:response]
                                                               message:nil
                                                                  code: @(AMapSearchErrorOK)]];
 }

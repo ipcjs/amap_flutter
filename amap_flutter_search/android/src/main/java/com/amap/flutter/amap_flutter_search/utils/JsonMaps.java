@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.core.PoiItem;
+import com.amap.api.services.geocoder.AoiItem;
 import com.amap.api.services.geocoder.RegeocodeAddress;
 import com.amap.api.services.poisearch.PoiItemExtension;
 
@@ -85,6 +86,17 @@ public class JsonMaps {
     map.put("township", address.getTownship());
     map.put("towncode", address.getTowncode());
     map.put("pois", map(address.getPois(), JsonMaps::poiToMap));
+    map.put("aois", map(address.getAois(), JsonMaps::aoiToMap));
+    return map;
+  }
+
+  public  static  Map<String, Object> aoiToMap(AoiItem aoi){
+    Map<String, Object> map = new HashMap<>();
+    map.put("center", pointToObject(aoi.getAoiCenterPoint()));
+    map.put("adCode", aoi.getAdCode());
+    map.put("area", aoi.getAoiArea());
+    map.put("id", aoi.getAoiId());
+    map.put("name", aoi.getAoiName());
     return map;
   }
 }
