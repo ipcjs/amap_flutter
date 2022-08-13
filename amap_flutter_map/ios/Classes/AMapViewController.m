@@ -229,6 +229,16 @@
             }
         }];
     }];
+    [self.channel addMethodName:@"map#getScreenCoordinate" withHandler:^(FlutterMethodCall * _Nonnull call, FlutterResult  _Nonnull result) {
+        CGPoint point = [weakSelf.mapView convertCoordinate:[AMapConvertUtil coordinateFromArray:call.arguments]
+                              toPointToView:weakSelf.mapView];
+        result([AMapConvertUtil jsonFromScreenCoordinate:point]);
+    }];
+    [self.channel addMethodName:@"map#getLatLng" withHandler:^(FlutterMethodCall * _Nonnull call, FlutterResult  _Nonnull result) {
+        CLLocationCoordinate2D latLng = [weakSelf.mapView convertPoint:[AMapConvertUtil screenCoordinateFromJson:call.arguments]
+                                                  toCoordinateFromView:weakSelf.mapView];
+        result([AMapConvertUtil jsonFromCoordinate:latLng]);
+    }];
     [self.channel addMethodName:@"map#setRenderFps" withHandler:^(FlutterMethodCall * _Nonnull call, FlutterResult  _Nonnull result) {
         NSInteger fps = [call.arguments[@"fps"] integerValue];
         [weakSelf.mapView setMaxRenderFrame:fps];
