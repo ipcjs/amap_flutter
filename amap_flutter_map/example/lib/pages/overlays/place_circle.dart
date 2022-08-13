@@ -21,11 +21,19 @@ class _Body extends StatefulWidget {
 }
 
 class _State extends State<_Body> {
+  AMapController? _controller;
   LatLng? _topLeft;
   ScreenCoordinate? _topLeftPoint;
-  void _onMapCreated(AMapController controller) async {
-    final latLng = await controller.getLatLng(ScreenCoordinate(x: 0, y: 0));
-    final point = await controller.getScreenCoordinate(latLng);
+  void _onMapCreated(AMapController controller) {
+    _controller = controller;
+    _refresh();
+  }
+
+  Future<void> _refresh() async {
+    if (_controller == null) return;
+
+    final latLng = await _controller!.getLatLng(ScreenCoordinate(x: 0, y: 0));
+    final point = await _controller!.getScreenCoordinate(latLng);
     if (mounted) {
       setState(() {
         _topLeft = latLng;
@@ -57,7 +65,10 @@ class _State extends State<_Body> {
     return Stack(
       children: [
         map,
-        Text('topLeft: ${_topLeftPoint} -> ${_topLeft?.toJson()}'),
+        TextButton(
+          onPressed: () => _refresh(),
+          child: Text('topLeft: ${_topLeftPoint} -> ${_topLeft?.toJson()}'),
+        ),
       ],
     );
   }

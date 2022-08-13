@@ -69,4 +69,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+/// 转换坐标点成String
+///
+/// @see [NSStringFromCGPoint]
+NSString * NSStringFromCoordinate(CLLocationCoordinate2D ll);
+
 NS_ASSUME_NONNULL_END

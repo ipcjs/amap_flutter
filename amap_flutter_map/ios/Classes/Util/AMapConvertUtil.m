@@ -225,3 +225,7 @@
 
 
 @end
+
+NSString * NSStringFromCoordinate(CLLocationCoordinate2D ll) {
+    return [NSString stringWithFormat:@"(%f, %f)", ll.latitude, ll.latitude];
+}
