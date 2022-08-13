@@ -21,7 +21,18 @@ class _Body extends StatefulWidget {
 }
 
 class _State extends State<_Body> {
-  void _onMapCreated(AMapController controller) {}
+  LatLng? _topLeft;
+  ScreenCoordinate? _topLeftPoint;
+  void _onMapCreated(AMapController controller) async {
+    final latLng = await controller.getLatLng(ScreenCoordinate(x: 0, y: 0));
+    final point = await controller.getScreenCoordinate(latLng);
+    if (mounted) {
+      setState(() {
+        _topLeft = latLng;
+        _topLeftPoint = point;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +54,11 @@ class _State extends State<_Body> {
       },
     );
 
-    return Container(
-      child: map,
+    return Stack(
+      children: [
+        map,
+        Text('topLeft: ${_topLeftPoint} -> ${_topLeft?.toJson()}'),
+      ],
     );
   }
 }

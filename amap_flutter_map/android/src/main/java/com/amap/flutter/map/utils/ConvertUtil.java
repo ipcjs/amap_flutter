@@ -7,6 +7,8 @@ import android.graphics.Point;
 import android.location.Location;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdate;
 import com.amap.api.maps.CameraUpdateFactory;
@@ -27,8 +29,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import androidx.annotation.NonNull;
 
 import io.flutter.view.FlutterMain;
 
@@ -72,7 +72,7 @@ public class ConvertUtil {
         if (null != hasAgreeObj) {
             boolean hasAgree = toBoolean(hasAgreeObj);
             //使用反射的方法调用适配之前的版本
-            try{
+            try {
                 Method method = clazz.getMethod("updatePrivacyAgree", Context.class, boolean.class);
                 method.invoke(null, context, hasAgree);
             } catch (Throwable e) {
@@ -119,8 +119,8 @@ public class ConvertUtil {
                 return CameraUpdateFactory.newLatLngZoom(toLatLng(data.get(1)), toFloat(data.get(2)));
             case "scrollBy":
                 return CameraUpdateFactory.scrollBy( //
-                                                     toFloatPixels(data.get(1)), //
-                                                     toFloatPixels(data.get(2)));
+                        toFloatPixels(data.get(1)), //
+                        toFloatPixels(data.get(2)));
             case "zoomBy":
                 if (data.size() == 2) {
                     return CameraUpdateFactory.zoomBy(toFloat(data.get(1)));
@@ -178,6 +178,18 @@ public class ConvertUtil {
         data.put("tilt", position.tilt);
         data.put("zoom", position.zoom);
         return data;
+    }
+
+    public static Point toScreenCoordinate(Object o) {
+        Map<?, ?> map = toMap(o);
+        return new Point((int) map.get("x"), (int) map.get("y"));
+    }
+
+    public static Object screenCoordinateToMap(Point point) {
+        final Map<String, Integer> map = new HashMap<>(2);
+        map.put("x", point.x);
+        map.put("y", point.y);
+        return map;
     }
 
     /**
