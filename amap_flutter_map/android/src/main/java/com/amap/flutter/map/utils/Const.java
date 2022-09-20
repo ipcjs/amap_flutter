@@ -17,6 +17,8 @@ public class Const {
     public static final String METHOD_MAP_MOVE_CAMERA = "camera#move";
     public static final String METHOD_MAP_SET_RENDER_FPS = "map#setRenderFps";
     public static final String METHOD_MAP_TAKE_SNAPSHOT = "map#takeSnapshot";
+    public static final String METHOD_MAP_GET_SCREEN_COORDINATE = "map#getScreenCoordinate";
+    public static final String METHOD_MAP_GET_LAT_LNG = "map#getLatLng";
     public static final String METHOD_MAP_CLEAR_DISK = "map#clearDisk";
 
     public static final String[] METHOD_ID_LIST_FOR_MAP = {
@@ -27,6 +29,8 @@ public class Const {
             METHOD_MAP_MOVE_CAMERA,
             METHOD_MAP_SET_RENDER_FPS,
             METHOD_MAP_TAKE_SNAPSHOT,
+            METHOD_MAP_GET_SCREEN_COORDINATE,
+            METHOD_MAP_GET_LAT_LNG,
             METHOD_MAP_CLEAR_DISK};
 
 

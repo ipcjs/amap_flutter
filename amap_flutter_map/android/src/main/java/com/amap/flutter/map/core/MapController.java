@@ -1,11 +1,15 @@
 package com.amap.flutter.map.core;
 
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.location.Location;
+
+import androidx.annotation.NonNull;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdate;
 import com.amap.api.maps.CameraUpdateFactory;
+import com.amap.api.maps.Projection;
 import com.amap.api.maps.TextureMapView;
 import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.CustomMapStyleOptions;
@@ -22,7 +26,6 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
@@ -138,6 +141,34 @@ public class MapController
                     });
                 }
                 break;
+            case Const.METHOD_MAP_GET_SCREEN_COORDINATE: {
+                LatLng latLng = ConvertUtil.toLatLng(call.arguments);
+                Projection projection = amap.getProjection();
+                if (projection != null) {
+                    Point point = projection.toScreenLocation(latLng);
+                    result.success(ConvertUtil.screenCoordinateToMap(point));
+                } else {
+                    result.error(
+                            "AMap uninitialized",
+                            "getScreenCoordinate called prior to map initialization",
+                            null);
+                }
+                break;
+            }
+            case Const.METHOD_MAP_GET_LAT_LNG: {
+                Point point = ConvertUtil.toScreenCoordinate(call.arguments);
+                Projection projection = amap.getProjection();
+                if (projection != null) {
+                    LatLng latLng = amap.getProjection().fromScreenLocation(point);
+                    result.success(ConvertUtil.latLngToList(latLng));
+                } else {
+                    result.error(
+                            "AMap uninitialized",
+                            "getLatLng called prior to map initialization",
+                            null);
+                }
+                break;
+            }
             case Const.METHOD_MAP_CLEAR_DISK:
                 if (null != amap) {
                     amap.removecache();

@@ -33,6 +33,18 @@
                        [data[1] doubleValue]);
 }
 
++ (CGPoint)screenCoordinateFromJson:(NSDictionary *)json {
+    double x = [json[@"x"] doubleValue];
+    double y = [json[@"y"] doubleValue];
+    return CGPointMake(x, y);
+}
+
++ (NSDictionary *)jsonFromScreenCoordinate:(CGPoint)point {
+    return @{
+        @"x": @(lroundf(point.x)),
+        @"y": @(lroundf(point.y)),
+    };
+}
 /// 从数据中解析经纬度
 /// @param array 经纬度数组对（默认第一个当做维度，第二个当做经度）
 + (CLLocationCoordinate2D)coordinateFromArray:(NSArray *)array {
@@ -213,3 +225,7 @@
 
 
 @end
+
+NSString * NSStringFromCoordinate(CLLocationCoordinate2D ll) {
+    return [NSString stringWithFormat:@"(%f, %f)", ll.latitude, ll.latitude];
+}

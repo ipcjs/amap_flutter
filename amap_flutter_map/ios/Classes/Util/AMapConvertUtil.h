@@ -28,6 +28,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param data 数组
 + (CGPoint)pointFromArray:(NSArray*)data;
 
++ (NSDictionary *)jsonFromScreenCoordinate:(CGPoint)point;
+
++ (CGPoint)screenCoordinateFromJson:(NSDictionary *)json;
+
 /// 从数据中解析经纬度
 /// @param array 经纬度数组对（默认第一个当做维度，第二个当做经度）
 + (CLLocationCoordinate2D)coordinateFromArray:(NSArray *)array;
@@ -64,5 +68,10 @@ NS_ASSUME_NONNULL_BEGIN
 + (MAMapRect)mapRectFromArray:(NSArray *)array;
 
 @end
+
+/// 转换坐标点成String
+///
+/// @see [NSStringFromCGPoint]
+NSString * NSStringFromCoordinate(CLLocationCoordinate2D ll);
 
 NS_ASSUME_NONNULL_END
