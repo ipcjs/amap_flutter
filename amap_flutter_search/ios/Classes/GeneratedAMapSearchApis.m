@@ -205,7 +205,7 @@ void AmapSearchHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject
         binaryMessenger:binaryMessenger
         codec:AmapSearchHostApiGetCodec()        ];
     if (api) {
-      NSCAssert([api respondsToSelector:@selector(searchPoiPageNum:pageSize:query:types:city:center:radiusInMeters:isDistanceSort:extensions:completion:)], @"AmapSearchHostApi api (%@) doesn't respond to @selector(searchPoiPageNum:pageSize:query:types:city:center:radiusInMeters:isDistanceSort:extensions:completion:)", api);
+      NSCAssert([api respondsToSelector:@selector(searchPoiPageNum:pageSize:query:types:city:location:boundRadius:isDistanceSort:extensions:completion:)], @"AmapSearchHostApi api (%@) doesn't respond to @selector(searchPoiPageNum:pageSize:query:types:city:location:boundRadius:isDistanceSort:extensions:completion:)", api);
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         NSNumber *arg_pageNum = GetNullableObjectAtIndex(args, 0);
@@ -213,11 +213,11 @@ void AmapSearchHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject
         NSString *arg_query = GetNullableObjectAtIndex(args, 2);
         NSString *arg_types = GetNullableObjectAtIndex(args, 3);
         NSString *arg_city = GetNullableObjectAtIndex(args, 4);
-        id arg_center = GetNullableObjectAtIndex(args, 5);
-        NSNumber *arg_radiusInMeters = GetNullableObjectAtIndex(args, 6);
+        id arg_location = GetNullableObjectAtIndex(args, 5);
+        NSNumber *arg_boundRadius = GetNullableObjectAtIndex(args, 6);
         NSNumber *arg_isDistanceSort = GetNullableObjectAtIndex(args, 7);
         NSString *arg_extensions = GetNullableObjectAtIndex(args, 8);
-        [api searchPoiPageNum:arg_pageNum pageSize:arg_pageSize query:arg_query types:arg_types city:arg_city center:arg_center radiusInMeters:arg_radiusInMeters isDistanceSort:arg_isDistanceSort extensions:arg_extensions completion:^(AmapApiResult *_Nullable output, FlutterError *_Nullable error) {
+        [api searchPoiPageNum:arg_pageNum pageSize:arg_pageSize query:arg_query types:arg_types city:arg_city location:arg_location boundRadius:arg_boundRadius isDistanceSort:arg_isDistanceSort extensions:arg_extensions completion:^(AmapApiResult *_Nullable output, FlutterError *_Nullable error) {
           callback(wrapResult(output, error));
         }];
       }];

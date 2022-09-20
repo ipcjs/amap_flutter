@@ -22,6 +22,7 @@ PoiItem _$PoiItemFromJson(Map json) => PoiItem(
       website: json['website'] as String,
       poiExtension: PoiItemExtension.fromJson(
           Map<String, dynamic>.from(json['poiExtension'] as Map)),
+      distance: json['distance'] as int,
     );
 
 Map<String, dynamic> _$PoiItemToJson(PoiItem instance) => <String, dynamic>{
@@ -39,6 +40,7 @@ Map<String, dynamic> _$PoiItemToJson(PoiItem instance) => <String, dynamic>{
       'tel': instance.tel,
       'website': instance.website,
       'poiExtension': instance.poiExtension.toJson(),
+      'distance': instance.distance,
     };
 
 PoiItemExtension _$PoiItemExtensionFromJson(Map json) => PoiItemExtension(

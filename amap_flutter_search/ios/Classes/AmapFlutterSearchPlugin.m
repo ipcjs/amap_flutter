@@ -46,19 +46,20 @@ typedef void (^CompletionHandle)(AmapApiResult *res, FlutterError *err);
 						 privacyInfo:[isShow boolValue] ? AMapPrivacyInfoStatusDidContain : AMapPrivacyInfoStatusNotContain];
 }
 
-- (void)searchPoiPageNum:(nonnull NSNumber *)pageNum pageSize:(nonnull NSNumber *)pageSize query:(nonnull NSString *)query types:(nonnull NSString *)types city:(nonnull NSString *)city center:(nullable id)center radiusInMeters:(nullable NSNumber *)radiusInMeters isDistanceSort:(nullable NSNumber *)isDistanceSort extensions:(nonnull NSString *)extensions completion:(nonnull void (^)(AmapApiResult * _Nullable, FlutterError * _Nullable))completion {
+- (void)searchPoiPageNum:(NSNumber *)pageNum pageSize:(NSNumber *)pageSize query:(NSString *)query types:(NSString *)types city:(NSString *)city location:(id)location boundRadius:(NSNumber *)boundRadius isDistanceSort:(NSNumber *)isDistanceSort extensions:(NSString *)extensions completion:(void (^)(AmapApiResult * _Nullable, FlutterError * _Nullable))completion {
 	// 如果有中心点传入，请求周边POI；没有请求关键字POI
-	if (center != nil && radiusInMeters != nil && isDistanceSort != nil) {
+	if (location != nil && boundRadius != nil) {
 		AMapPOIAroundSearchRequest *request = [[AMapPOIAroundSearchRequest alloc] init];
 		request.page = [pageNum integerValue];
 		request.offset = [pageSize integerValue];
 		request.keywords = query;
 		request.types = types;
 		request.city = city;
-		request.location = [Helper pointFromObject:center];
 		request.requireExtension = [extensions isEqualToString:@"all"];
-		request.radius = [radiusInMeters integerValue];
-		request.sortrule = [isDistanceSort integerValue];
+        request.location = [Helper pointFromObject:location];
+        request.sortrule = [isDistanceSort boolValue] ? 0 : 1;
+
+		request.radius = [boundRadius integerValue];
 
 		[self.requestDictionary addEntriesFromDictionary:[NSDictionary dictionaryWithObject:completion forKey:[NSValue valueWithNonretainedObject:request]]];
 		[self.search AMapPOIAroundSearch:request];
@@ -70,6 +71,8 @@ typedef void (^CompletionHandle)(AmapApiResult *res, FlutterError *err);
 		request.types = types;
 		request.city = city;
 		request.requireExtension = [extensions isEqualToString:@"all"];
+        request.location = [Helper pointFromObject:location];
+        request.sortrule = [isDistanceSort boolValue] ? 0 : 1;
 
         [self.requestDictionary setObject:completion forKey: [NSValue valueWithNonretainedObject:request]];
 		[self.search AMapPOIKeywordsSearch:request];

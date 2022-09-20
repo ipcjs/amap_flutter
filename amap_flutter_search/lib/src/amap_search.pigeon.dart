@@ -164,11 +164,11 @@ class SearchHostApi {
     }
   }
 
-  Future<ApiResult> searchPoi(int arg_pageNum, int arg_pageSize, String arg_query, String arg_types, String arg_city, Object? arg_center, int? arg_radiusInMeters, bool? arg_isDistanceSort, String arg_extensions) async {
+  Future<ApiResult> searchPoi(int arg_pageNum, int arg_pageSize, String arg_query, String arg_types, String arg_city, Object? arg_location, int? arg_boundRadius, bool arg_isDistanceSort, String arg_extensions) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.SearchHostApi.searchPoi', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_pageNum, arg_pageSize, arg_query, arg_types, arg_city, arg_center, arg_radiusInMeters, arg_isDistanceSort, arg_extensions]) as Map<Object?, Object?>?;
+        await channel.send(<Object?>[arg_pageNum, arg_pageSize, arg_query, arg_types, arg_city, arg_location, arg_boundRadius, arg_isDistanceSort, arg_extensions]) as Map<Object?, Object?>?;
     if (replyMap == null) {
       throw PlatformException(
         code: 'channel-error',

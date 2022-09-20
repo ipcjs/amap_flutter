@@ -1,13 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:amap_flutter_search/amap_flutter_search.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  AmapFlutterSearch().init(
+  await AmapFlutterSearch().init(
     apiKey: const AMapApiKey(
       androidKey: '011689ce44dada05b481e7a5b46f361d',
       iosKey: 'd50ed2c21af0d0a4d1cc9983d36fdb68',
@@ -42,22 +44,24 @@ class _MyAppState extends State<MyApp> {
   Future<void> _refresh() async {
     var futureBase = _search.searchPoi(PoiSearchQuery(
       extensionType: ExtensionType.base,
-      bound: PoiSearchBound(
-        center: center,
-      ),
+      location: center,
+      query: '1970',
+      isDistanceSort: false,
+      // bound: PoiSearchBound.circle(),
     ));
     var futureAll = _search.searchPoi(PoiSearchQuery(
       extensionType: ExtensionType.all,
-      bound: PoiSearchBound(
-        center: center,
-      ),
+      location: center,
+      bound: PoiSearchBound.circle(),
     ));
     // 模拟同时执行多个请求, Native层需要能够区分各自的响应
     final results = await Future.wait([futureBase, futureAll]);
 
+    debugPrint('base: ${results[0]}');
+    debugPrint('all: ${results[0]}');
     if (mounted) {
       setState(() {
-        poiList = results[1].poiList;
+        poiList = results[0].poiList;
       });
     }
   }
