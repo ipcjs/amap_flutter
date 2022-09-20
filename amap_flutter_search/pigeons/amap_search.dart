@@ -41,9 +41,9 @@ abstract class SearchHostApi {
     String query,
     String types,
     String city,
-    Object? center,
-    int? radiusInMeters,
-    bool? isDistanceSort,
+    Object? location,
+    int? boundRadius,
+    bool isDistanceSort,
     String extensions,
   );
 

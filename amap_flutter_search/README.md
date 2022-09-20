@@ -2,6 +2,11 @@
 
 高德地图搜索插件
 
+原生SDK版本:
+
+- Android: `9.3.1`([文档下载](https://github.com/ipcjs/amap_flutter/files/9604883/search-9.3.1-javadoc.zip))
+- iOS: `9.3.1`
+
 ### 创建工程
 
 ```shell

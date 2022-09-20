@@ -91,6 +91,7 @@
 			@"tel": obj.tel ?: @"",
 			@"website": obj.website ?: @"",
             @"poiExtension": [Helper poiExtensionToDictionary:obj.extensionInfo],
+            @"distance": @(obj.distance),
     };
 }
 
@@ -99,7 +100,7 @@
         @"name": obj.name ?: @"",
         @"id": obj.uid ?: @"",
         @"adCode": obj.adcode ?: @"",
-        @"area": @(obj.area ?: 0.0),
+        @"area": @(obj.area),
         @"center": [Helper pointToObject:obj.location] ?: [NSNull null],
     };
 }

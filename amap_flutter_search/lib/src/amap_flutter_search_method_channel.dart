@@ -53,9 +53,9 @@ class MethodChannelAmapFlutterSearch extends AmapFlutterSearchPlatform {
         query.query,
         query.types,
         query.city,
-        query.bound?.center.toJson(),
-        query.bound?.radiusInMeters,
-        query.bound?.isDistanceSort,
+        query.location?.toJson(),
+        query.bound?.radius,
+        query.isDistanceSort,
         query.extensionType.name,
       ) //
       .toData(PoiSearchResult.fromJson);

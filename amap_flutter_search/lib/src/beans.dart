@@ -25,6 +25,7 @@ class PoiItem {
     required this.tel,
     required this.website,
     required this.poiExtension,
+    required this.distance,
   });
 
   final String title;
@@ -46,6 +47,11 @@ class PoiItem {
   final String tel;
   final String website;
   final PoiItemExtension poiExtension;
+
+  /// 离[PoiSearchQuery.location]的距离, 只有在周边搜索(设置了[PoiSearchQuery.bound]参数)时才有效
+  ///
+  /// Android端用-1表示无效的值, iOS端用0表示无效值...
+  final int distance;
 
   /// 实测在Android平台上[cityCode]返回的是城市电话区号...
   /// 这里通过取[adCode]的前4位, 尝试返回和[adCode], [provinceCode]类似格式的的城市代码
@@ -93,7 +99,12 @@ class PoiSearchQuery {
     this.types = '',
     this.bound,
     this.extensionType = ExtensionType.base,
-  });
+    this.location,
+    this.isDistanceSort = true,
+  }) : assert(
+          !(bound?.radius != null && location == null),
+          '设置搜索半径时, location不能为空',
+        );
   final int pageNum;
   final int pageSize;
   final String query;
@@ -106,17 +117,21 @@ class PoiSearchQuery {
   final String city;
   final PoiSearchBound? bound;
   final ExtensionType extensionType;
+  final LatLng? location;
+  final bool isDistanceSort;
 }
 
 class PoiSearchBound {
-  PoiSearchBound({
-    required this.center,
-    this.radiusInMeters = 1000,
-    this.isDistanceSort = true,
-  });
-  final LatLng center;
-  final int radiusInMeters;
-  final bool isDistanceSort;
+  /// 在以[PoiSearchQuery.location]为中心的圆中搜索
+  PoiSearchBound.circle([this.radius = 1000]) : points = null;
+
+  /// 多边形搜索, 预留在这里, 当前未实现(
+  PoiSearchBound.polygon(this.points) : radius = null {
+    throw UnimplementedError('当前未实现');
+  }
+
+  final int? radius;
+  final List<LatLng>? points;
 }
 
 enum ExtensionType {

@@ -47,6 +47,7 @@ public class JsonMaps {
     poiMap.put("snippet", poi.getSnippet());
     poiMap.put("poiId", poi.getPoiId());
     poiMap.put("position", pointToObject(poi.getLatLonPoint()));
+    poiMap.put("distance", poi.getDistance());
     return poiMap;
   }
 

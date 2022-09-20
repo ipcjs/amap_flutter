@@ -126,7 +126,7 @@ public class GeneratedAMapSearchApis {
     void setApiKey(@NonNull String apiKey);
     void updatePrivacyShow(@NonNull Boolean isContains, @NonNull Boolean isShow);
     void updatePrivacyAgree(@NonNull Boolean isAgree);
-    void searchPoi(@NonNull Long pageNum, @NonNull Long pageSize, @NonNull String query, @NonNull String types, @NonNull String city, @Nullable Object center, @Nullable Long radiusInMeters, @Nullable Boolean isDistanceSort, @NonNull String extensions, Result<ApiResult> result);
+    void searchPoi(@NonNull Long pageNum, @NonNull Long pageSize, @NonNull String query, @NonNull String types, @NonNull String city, @Nullable Object location, @Nullable Long boundRadius, @NonNull Boolean isDistanceSort, @NonNull String extensions, Result<ApiResult> result);
     void regeocode(@NonNull Object point, @NonNull Double radius, @NonNull String latLngType, @NonNull String extensionType, @NonNull String poiTypes, @NonNull String mode, Result<ApiResult> result);
 
     /** The codec used by SearchHostApi. */
@@ -259,9 +259,12 @@ public class GeneratedAMapSearchApis {
               if (cityArg == null) {
                 throw new NullPointerException("cityArg unexpectedly null.");
               }
-              Object centerArg = (Object)args.get(5);
-              Number radiusInMetersArg = (Number)args.get(6);
+              Object locationArg = (Object)args.get(5);
+              Number boundRadiusArg = (Number)args.get(6);
               Boolean isDistanceSortArg = (Boolean)args.get(7);
+              if (isDistanceSortArg == null) {
+                throw new NullPointerException("isDistanceSortArg unexpectedly null.");
+              }
               String extensionsArg = (String)args.get(8);
               if (extensionsArg == null) {
                 throw new NullPointerException("extensionsArg unexpectedly null.");
@@ -277,7 +280,7 @@ public class GeneratedAMapSearchApis {
                 }
               };
 
-              api.searchPoi((pageNumArg == null) ? null : pageNumArg.longValue(), (pageSizeArg == null) ? null : pageSizeArg.longValue(), queryArg, typesArg, cityArg, centerArg, (radiusInMetersArg == null) ? null : radiusInMetersArg.longValue(), isDistanceSortArg, extensionsArg, resultCallback);
+              api.searchPoi((pageNumArg == null) ? null : pageNumArg.longValue(), (pageSizeArg == null) ? null : pageSizeArg.longValue(), queryArg, typesArg, cityArg, locationArg, (boundRadiusArg == null) ? null : boundRadiusArg.longValue(), isDistanceSortArg, extensionsArg, resultCallback);
             }
             catch (Error | RuntimeException exception) {
               wrapped.put("error", wrapError(exception));

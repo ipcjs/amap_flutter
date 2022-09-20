@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.amap.api.services.core.AMapException;
-import com.amap.api.services.core.PoiItem;
 import com.amap.api.services.core.ServiceSettings;
 import com.amap.api.services.geocoder.GeocodeSearch;
 import com.amap.api.services.geocoder.RegeocodeQuery;
@@ -73,9 +72,9 @@ public class AmapFlutterSearchPlugin implements FlutterPlugin, SearchHostApi {
       @NonNull String queryText,
       @NonNull String types,
       @NonNull String city,
-      @Nullable Object center,
-      @Nullable Long radiusInMeters,
-      @Nullable Boolean isDistanceSort,
+      @Nullable Object location,
+      @Nullable Long boundRadius,
+      @NonNull Boolean isDistanceSort,
       @NonNull String extensions,
       GeneratedAMapSearchApis.Result<ApiResult> result
   ) {
@@ -83,6 +82,10 @@ public class AmapFlutterSearchPlugin implements FlutterPlugin, SearchHostApi {
     query.setPageNum(pageNum.intValue());
     query.setPageSize(pageSize.intValue());
     query.setExtensions(extensions);
+    query.setDistanceSort(isDistanceSort);
+    if (location != null) {
+      query.setLocation(JsonMaps.pointFromObject(location));
+    }
     PoiSearch poiSearch;
     try {
       poiSearch = new PoiSearch(context, query);
@@ -93,8 +96,8 @@ public class AmapFlutterSearchPlugin implements FlutterPlugin, SearchHostApi {
           .build());
       return;
     }
-    if (center != null && radiusInMeters != null && isDistanceSort != null) {
-      poiSearch.setBound(new PoiSearch.SearchBound(JsonMaps.pointFromObject(center), radiusInMeters.intValue(), isDistanceSort));
+    if (boundRadius != null && location != null) {
+      poiSearch.setBound(new PoiSearch.SearchBound(JsonMaps.pointFromObject(location), boundRadius.intValue(), isDistanceSort));
     }
     poiSearch.setOnPoiSearchListener(new SimpleOnPoiSearchListener() {
       @Override
