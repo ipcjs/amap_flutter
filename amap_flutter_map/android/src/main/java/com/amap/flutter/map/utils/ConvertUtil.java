@@ -30,7 +30,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.flutter.view.FlutterMain;
+import io.flutter.FlutterInjector;
+import io.flutter.embedding.engine.loader.FlutterLoader;
 
 /**
  * @author whm
@@ -374,6 +375,7 @@ public class ConvertUtil {
 
 
     public static BitmapDescriptor toBitmapDescriptor(Object o) {
+        FlutterLoader loader = FlutterInjector.instance().flutterLoader();
         final List<?> data = toList(o);
         switch (toString(data.get(0))) {
             case "defaultMarker":
@@ -385,15 +387,15 @@ public class ConvertUtil {
             case "fromAsset":
                 if (data.size() == 2) {
                     return BitmapDescriptorFactory.fromAsset(
-                            FlutterMain.getLookupKeyForAsset(toString(data.get(1))));
+                            loader.getLookupKeyForAsset(toString(data.get(1))));
                 } else {
                     return BitmapDescriptorFactory.fromAsset(
-                            FlutterMain.getLookupKeyForAsset(toString(data.get(1)), toString(data.get(2))));
+                            loader.getLookupKeyForAsset(toString(data.get(1)), toString(data.get(2))));
                 }
             case "fromAssetImage":
                 if (data.size() == 3) {
                     return BitmapDescriptorFactory.fromAsset(
-                            FlutterMain.getLookupKeyForAsset(toString(data.get(1))));
+                            loader.getLookupKeyForAsset(toString(data.get(1))));
                 } else {
                     throw new IllegalArgumentException(
                             "'fromAssetImage' Expected exactly 3 arguments, got: " + data.size());
