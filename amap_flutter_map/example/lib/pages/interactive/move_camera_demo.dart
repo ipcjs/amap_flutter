@@ -209,24 +209,26 @@ class _BodyState extends State<_Body> {
       duration: 1000,
     );
   }
+
   TextButton _createMyFloatButton(String label, VoidCallback onPressed) {
     return TextButton(
       onPressed: onPressed,
       style: ButtonStyle(
-        shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+        shape: WidgetStateProperty.all(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
         //文字颜色
-        foregroundColor: MaterialStateProperty.all(Colors.white),
+        foregroundColor: WidgetStateProperty.all(Colors.white),
         //水波纹颜色
-        overlayColor: MaterialStateProperty.all(Colors.blueAccent),
-          //背景颜色
-          backgroundColor: MaterialStateProperty.resolveWith((states) {
-            //设置按下时的背景颜色
-            if (states.contains(MaterialState.pressed)) {
-              return Colors.blueAccent;
-            }
-            //默认背景颜色
-            return Colors.blue;
-          }),
+        overlayColor: WidgetStateProperty.all(Colors.blueAccent),
+        //背景颜色
+        backgroundColor: WidgetStateProperty.resolveWith((states) {
+          //设置按下时的背景颜色
+          if (states.contains(WidgetState.pressed)) {
+            return Colors.blueAccent;
+          }
+          //默认背景颜色
+          return Colors.blue;
+        }),
       ),
       child: Text(label),
     );

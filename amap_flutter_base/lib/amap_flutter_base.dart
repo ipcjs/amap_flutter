@@ -1,6 +1,5 @@
 library amap_flutter_base;
 
-import 'dart:ui' show Offset, hashValues;
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart'

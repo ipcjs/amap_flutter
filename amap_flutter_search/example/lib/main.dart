@@ -75,7 +75,7 @@ class _MyAppState extends State<MyApp> {
       point: position,
       extensionType: extensionType,
     ));
-    if (mounted) {
+    if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(result.toString()),
       ));

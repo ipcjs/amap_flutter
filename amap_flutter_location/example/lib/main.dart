@@ -24,6 +24,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+
     /// 设置是否已经包含高德隐私政策并弹窗展示显示用户查看，如果未包含或者没有弹窗展示，高德定位SDK将不会工作
     ///
     /// 高德SDK合规使用方案请参考官网地址：https://lbs.amap.com/news/sdkhgsy
@@ -52,7 +53,8 @@ class _MyAppState extends State<MyApp> {
     ///key的申请请参考高德开放平台官网说明<br>
     ///Android: https://lbs.amap.com/api/android-location-sdk/guide/create-project/get-key
     ///iOS: https://lbs.amap.com/api/ios-location-sdk/guide/create-project/get-key
-    AMapFlutterLocation.setApiKey("1dbf56e2e8a4d0e4cdc2df9efd36bc71", "dfb64c0463cb53927914364b5c09aba0");
+    AMapFlutterLocation.setApiKey(
+        "1dbf56e2e8a4d0e4cdc2df9efd36bc71", "dfb64c0463cb53927914364b5c09aba0");
 
     ///iOS 获取native精度类型
     if (Platform.isIOS) {
@@ -60,7 +62,9 @@ class _MyAppState extends State<MyApp> {
     }
 
     ///注册定位结果监听
-    _locationListener = _locationPlugin.onLocationChanged().listen((Map<String, Object> result) {
+    _locationListener = _locationPlugin
+        .onLocationChanged()
+        .listen((Map<String, Object> result) {
       setState(() {
         _locationResult = result;
       });
@@ -93,7 +97,8 @@ class _MyAppState extends State<MyApp> {
     ///逆地理信息的语言类型
     locationOption.geoLanguage = GeoLanguage.DEFAULT;
 
-    locationOption.desiredLocationAccuracyAuthorizationMode = AMapLocationAccuracyAuthorizationMode.ReduceAccuracy;
+    locationOption.desiredLocationAccuracyAuthorizationMode =
+        AMapLocationAccuracyAuthorizationMode.ReduceAccuracy;
 
     locationOption.fullAccuracyPurposeKey = "AMapLocationScene";
 
@@ -149,8 +154,8 @@ class _MyAppState extends State<MyApp> {
               onPressed: _startLocation,
               child: new Text('开始定位'),
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.blue),
-                foregroundColor: MaterialStateProperty.all(Colors.white),
+                backgroundColor: WidgetStateProperty.all(Colors.blue),
+                foregroundColor: WidgetStateProperty.all(Colors.white),
               ),
             ),
             new Container(width: 20.0),
@@ -158,8 +163,8 @@ class _MyAppState extends State<MyApp> {
               onPressed: _stopLocation,
               child: new Text('停止定位'),
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.blue),
-                foregroundColor: MaterialStateProperty.all(Colors.white),
+                backgroundColor: WidgetStateProperty.all(Colors.blue),
+                foregroundColor: WidgetStateProperty.all(Colors.white),
               ),
             )
           ],
@@ -210,10 +215,13 @@ class _MyAppState extends State<MyApp> {
 
   ///获取iOS native的accuracyAuthorization类型
   void requestAccuracyAuthorization() async {
-    AMapAccuracyAuthorization currentAccuracyAuthorization = await _locationPlugin.getSystemAccuracyAuthorization();
-    if (currentAccuracyAuthorization == AMapAccuracyAuthorization.AMapAccuracyAuthorizationFullAccuracy) {
+    AMapAccuracyAuthorization currentAccuracyAuthorization =
+        await _locationPlugin.getSystemAccuracyAuthorization();
+    if (currentAccuracyAuthorization ==
+        AMapAccuracyAuthorization.AMapAccuracyAuthorizationFullAccuracy) {
       print("精确定位类型");
-    } else if (currentAccuracyAuthorization == AMapAccuracyAuthorization.AMapAccuracyAuthorizationReducedAccuracy) {
+    } else if (currentAccuracyAuthorization ==
+        AMapAccuracyAuthorization.AMapAccuracyAuthorizationReducedAccuracy) {
       print("模糊定位类型");
     } else {
       print("未知定位类型");
