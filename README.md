@@ -11,3 +11,14 @@
 - [amap_flutter_map](amap_flutter_map): 地图, 改成依赖Google
 - [amap_flutter_location](amap_flutter_location): 定位, 基本上[未修改](https://github.com/ipcjs/amap_flutter/commits/master/amap_flutter_location)
 - [amap_flutter_search](amap_flutter_search): 搜索, 封装原生的搜索功能
+
+## 维护
+
+项目生成命令: (可以用于重新生成平台文件)
+
+```shell
+flutter create -a java -i objc --org=com.amap.flutter amap_flutter_base
+flutter create -a java -i objc --org=com.amap.flutter amap_flutter_location
+flutter create -a java -i objc --org=com.amap.flutter amap_flutter_map
+flutter create -a java -i objc --org=com.amap.flutter amap_flutter_search
+```

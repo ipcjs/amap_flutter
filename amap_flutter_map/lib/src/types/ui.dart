@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'dart:ui' show Color, hashValues;
+import 'dart:ui' show Color;
 import 'package:amap_flutter_map/amap_flutter_map.dart';
 
 /// 地图类型
@@ -93,7 +93,7 @@ class MinMaxZoomPreference {
   }
 
   @override
-  int get hashCode => hashValues(minZoom, maxZoom);
+  int get hashCode => Object.hash(minZoom, maxZoom);
 
   @override
   String toString() {
@@ -189,7 +189,7 @@ class MyLocationStyleOptions {
 
   @override
   int get hashCode =>
-      hashValues(enabled, circleFillColor, circleStrokeColor, icon);
+      Object.hash(enabled, circleFillColor, circleStrokeColor, icon);
 }
 
 ///地图自定义样式
@@ -246,7 +246,7 @@ class CustomStyleOptions {
   }
 
   @override
-  int get hashCode => hashValues(enabled, styleData, styleExtraData);
+  int get hashCode => Object.hash(enabled, styleData, styleExtraData);
 
   CustomStyleOptions clone() {
     return CustomStyleOptions(enabled,

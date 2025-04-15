@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'dart:ui' show hashValues, Offset;
+import 'dart:ui' show Offset;
 import 'package:amap_flutter_map/src/types/base_overlay.dart';
 import 'package:amap_flutter_base/amap_flutter_base.dart';
 import 'bitmap.dart';
@@ -60,7 +60,7 @@ class InfoWindow {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
-    if (other is !InfoWindow) {
+    if (other is! InfoWindow) {
       return false;
     }
     final InfoWindow typedOther = other;
@@ -68,7 +68,7 @@ class InfoWindow {
   }
 
   @override
-  int get hashCode => hashValues(title, snippet);
+  int get hashCode => Object.hash(title, snippet);
 
   @override
   String toString() {
@@ -161,7 +161,7 @@ class Marker extends BaseOverlay {
     LatLng? positionParam,
     double? rotationParam,
     bool? visibleParam,
-    ArgumentCallback<String?> ? onTapParam,
+    ArgumentCallback<String?>? onTapParam,
     MarkerDragEndCallback? onDragEndParam,
   }) {
     Marker copyMark = Marker(
@@ -218,7 +218,7 @@ class Marker extends BaseOverlay {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
-    if(other is !Marker) return false;
+    if (other is! Marker) return false;
     final Marker typedOther = other;
     return id == typedOther.id &&
         alpha == typedOther.alpha &&

@@ -44,7 +44,7 @@ class AMapApiKey {
   }
 
   @override
-  int get hashCode => hashValues(androidKey, iosKey);
+  int get hashCode => Object.hash(androidKey, iosKey);
 
   @override
   String toString() {

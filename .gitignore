@@ -3,3 +3,9 @@
 /demos/
 .DS_Store
 .project
+
+# FVM Version Cache
+.fvm/
+.fvmrc
+.vscode/
+.cxx/
