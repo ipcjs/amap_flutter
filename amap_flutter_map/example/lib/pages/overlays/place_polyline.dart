@@ -163,11 +163,11 @@ class _State extends State<_Body> {
 
   Future<void> _changeAlpha() async {
     final Polyline polyline = _polylines[selectedPolylineId]!;
-    final double current = polyline.color.opacity;
+    final double current = polyline.color.a;
     setState(() {
       _polylines[selectedPolylineId!] = polyline.copyWith(
-        colorParam:
-            polyline.color.withOpacity(current < 0.1 ? 1.0 : current * 0.75),
+        colorParam: polyline.color
+            .withValues(alpha: current < 0.1 ? 1.0 : current * 0.75),
       );
     });
   }

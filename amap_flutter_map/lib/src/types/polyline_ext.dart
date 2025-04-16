@@ -26,8 +26,8 @@ extension PolylineExt on google.Polyline {
     addIfPresent('visible', visible);
     addIfPresent('geodesic', geodesic);
     // 将color拆分成两部分
-    addIfPresent('alpha', color.opacity);
-    addIfPresent('color', color.withAlpha(0xff).value);
+    addIfPresent('alpha', color.a);
+    addIfPresent('color', color.withAlpha(0xff).toARGB32());
 
     // 做一个简单的映射
     DashLineType dashLineType;

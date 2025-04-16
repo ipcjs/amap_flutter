@@ -4,14 +4,14 @@ version: 3.0.0
 homepage: https://lbs.amap.com/
 
 environment:
-  sdk: ^3.0.0
-  flutter: ">=3.10.0"
+  sdk: ^3.6.0
+  flutter: ">=3.27.0"
 
 
 dependencies:
   flutter:
     sdk: flutter
-  google_maps_flutter_platform_interface: 2.2.1
+  google_maps_flutter_platform_interface: ^2.11.1
 
 dev_dependencies:
   flutter_test:

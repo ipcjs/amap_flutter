@@ -20,10 +20,10 @@ extension CircleExt on google.Circle {
     addIfPresent('id', circleId.value);
     // 不支持
     // addIfPresent('consumeTapEvents', consumeTapEvents);
-    addIfPresent('fillColor', fillColor.value);
+    addIfPresent('fillColor', fillColor.toARGB32());
     addIfPresent('center', center.toJson());
     addIfPresent('radius', radius);
-    addIfPresent('strokeColor', strokeColor.value);
+    addIfPresent('strokeColor', strokeColor.toARGB32());
     addIfPresent('strokeWidth', strokeWidth);
     addIfPresent('visible', visible);
     // Android支持, iOS不支持...

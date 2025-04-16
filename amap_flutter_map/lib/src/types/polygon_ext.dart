@@ -20,8 +20,8 @@ extension PolygonExt on google.Polygon {
     addIfPresent('id', polygonId.value);
     json['points'] = points.toJson();
     addIfPresent('strokeWidth', strokeWidth);
-    addIfPresent('strokeColor', strokeColor.value);
-    addIfPresent('fillColor', fillColor.value);
+    addIfPresent('strokeColor', strokeColor.toARGB32());
+    addIfPresent('fillColor', fillColor.toARGB32());
     addIfPresent('visible', visible);
     // 不支持
     // addIfPresent('consumeTapEvents', consumeTapEvents);

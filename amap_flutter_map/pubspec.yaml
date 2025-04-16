@@ -4,8 +4,8 @@ version: 3.0.0
 homepage: https://lbs.amap.com/
 
 environment:
-  sdk: ^3.0.0
-  flutter: ">=3.10.0"
+  sdk: ^3.6.0
+  flutter: ">=3.27.0"
 
 dependencies:
   flutter:
@@ -14,8 +14,7 @@ dependencies:
   meta: ^1.3.0
   plugin_platform_interface: ^2.0.0
   stream_transform: ^2.0.0
-  # 锁死google的版本号
-  google_maps_flutter_platform_interface: 2.2.1
+  google_maps_flutter_platform_interface: ^2.11.1
   amap_flutter_base: ^3.0.0
 #  amap_flutter_base:
 #    path: ../amap_flutter_base

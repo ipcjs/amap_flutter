@@ -56,7 +56,7 @@ class _State extends State<_Body> {
           center: LatLng(39.835334, 116.3710069),
           radius: 1000,
           strokeWidth: 4,
-          fillColor: Colors.red.withOpacity(0.5),
+          fillColor: Colors.red.withValues(alpha: 0.5),
           strokeColor: Colors.white,
         ),
       },
